@@ -640,7 +640,11 @@ function switchTab(name) {
 // ════════════════════════════════════════════════════════════════
 function renderNetworkNodes() {
   const grid = $('#networkNodes');
-  const people = STATE.people.filter(p => (p.connections || []).length > 0 || p.board === 'core');
+  let people = STATE.people.filter(p => (p.connections || []).length > 0 || p.board === 'core');
+  if (STATE.searchQuery) {
+    const q = STATE.searchQuery.toLowerCase();
+    people = people.filter(p => p.name.toLowerCase().includes(q) || p.role.toLowerCase().includes(q));
+  }
   grid.innerHTML = people.map(p => {
     const tc = STATE.tasks.filter(t => t.assignee === p.name || t.coLead === p.name).length;
     return `<div class="net-node" data-name="${p.name}" onclick="scrollToTwin('${p.id}')">
@@ -805,11 +809,15 @@ function renderPartnerships() {
 // ════════════════════════════════════════════════════════════════
 function renderTasks() {
   const filter = STATE.taskFilter;
+  const q = STATE.searchQuery.toLowerCase();
   const cols = [{ key: 'todo', label: 'To Do', cls: 'task-col-todo' }, { key: 'in-progress', label: 'In Progress', cls: 'task-col-progress' }, { key: 'done', label: 'Done', cls: 'task-col-done' }];
   const cc = { general: 'chip-muted', outreach: 'chip-blue', content: 'chip-purple', partnerships: 'chip-green', operations: 'chip-orange', tech: 'chip-blue', events: 'chip-red' };
   $('#taskBoard').innerHTML = cols.map(col => {
     let tasks = STATE.tasks.filter(t => t.status === col.key);
     if (filter !== 'all' && filter !== col.key) return '';
+    if (q) {
+      tasks = tasks.filter(t => (t.title || '').toLowerCase().includes(q) || (t.description || '').toLowerCase().includes(q) || (t.assignee || '').toLowerCase().includes(q) || (t.coLead || '').toLowerCase().includes(q));
+    }
     return `<div class="task-column ${col.cls}"><div class="task-column-header"><h3>${col.label}</h3><span class="count">${tasks.length}</span></div>${tasks.map(t => { const od = t.dueDate && t.status !== 'done' && new Date(t.dueDate) < new Date(); return `<div class="task-card glass"><div class="tc-header"><div class="tc-title">${t.title}</div><div class="tc-priority ${t.priority}"></div></div>${t.description ? `<div class="tc-desc">${t.description.length > 100 ? t.description.slice(0, 100) + '…' : t.description}</div>` : ''}<div class="tc-category"><span class="chip ${cc[t.category] || 'chip-muted'}">${t.category}</span></div><div class="tc-footer"><div class="tc-assignees">${t.assignee ? `<div class="tc-assignee-avatar" style="background:${hashColor(t.assignee)}" title="${t.assignee}">${initials(t.assignee)}</div>` : ''}${t.coLead ? `<div class="tc-assignee-avatar" style="background:${hashColor(t.coLead)};margin-left:-6px" title="${t.coLead}">${initials(t.coLead)}</div>` : ''}${!t.assignee && !t.coLead ? '<span style="font-size:0.68rem;color:var(--clr-text-dim)">Unassigned</span>' : ''}</div><div style="display:flex;align-items:center;gap:6px">${t.dueDate ? `<span class="tc-due ${od ? 'overdue' : ''}">${od ? '⚠ ' : ''}${shortDate(t.dueDate)}</span>` : ''}<div class="tc-actions"><button title="Edit" onclick="editTask('${t.id}')"><svg viewBox="0 0 20 20" fill="currentColor"><path d="m5.433 13.917 1.262-3.155A4 4 0 0 1 7.58 9.42l6.92-6.918a2.121 2.121 0 0 1 3 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 0 1-.65-.65Z"/></svg></button><button title="Delete" onclick="deleteTask('${t.id}')"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z" clip-rule="evenodd"/></svg></button></div></div></div></div>`; }).join('')}${tasks.length === 0 ? '<div class="empty-state"><p>No tasks</p></div>' : ''}</div>`;
   }).join('');
   $('#taskBoard').style.gridTemplateColumns = filter !== 'all' ? '1fr' : 'repeat(3, 1fr)';
@@ -836,6 +844,10 @@ function renderPlanner() {
 function renderTimeline(fp = 'all') {
   let ev = [...TIMELINE_EVENTS].sort((a, b) => new Date(b.date) - new Date(a.date));
   if (fp !== 'all') ev = ev.filter(e => e.person === fp);
+  const q = STATE.searchQuery.toLowerCase();
+  if (q) {
+    ev = ev.filter(e => (e.title || '').toLowerCase().includes(q) || (e.desc || '').toLowerCase().includes(q) || (e.quote || '').toLowerCase().includes(q) || (e.person || '').toLowerCase().includes(q));
+  }
   const up = [...new Set(TIMELINE_EVENTS.map(e => e.person))];
   $('#timelineFilterChips').innerHTML = `<button class="chip chip-filter ${fp === 'all' ? 'active' : ''}" data-tl-filter="all">All</button>${up.map(n => `<button class="chip chip-filter ${fp === n ? 'active' : ''}" data-tl-filter="${n}">${n.split(' ')[0]}</button>`).join('')}`;
   $$('[data-tl-filter]').forEach(b => b.addEventListener('click', () => renderTimeline(b.dataset.tlFilter)));
@@ -946,7 +958,14 @@ document.addEventListener('DOMContentLoaded', () => {
   $$('[data-close]').forEach(b => b.addEventListener('click', () => closeModal(b.dataset.close)));
   $$('[data-close-flyout]').forEach(b => b.addEventListener('click', () => closeModal(b.dataset.closeFlyout)));
   $$('.modal-overlay, .flyout-overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o) closeModal(o.id); }));
-  $('#globalSearch').addEventListener('input', e => { STATE.searchQuery = e.target.value; renderTwinGrid(); });
+  $('#globalSearch').addEventListener('input', e => { 
+    STATE.searchQuery = e.target.value; 
+    renderNetworkNodes();
+    renderTwinGrid();
+    renderTasks();
+    renderTimeline();
+    setTimeout(drawNetwork, 50);
+  });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') $$('.modal-overlay.open, .flyout-overlay.open').forEach(m => closeModal(m.id)); });
   window.addEventListener('resize', () => { if (STATE.activeTab === 'twin') drawNetwork(); });
 });

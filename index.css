@@ -120,36 +120,36 @@ body { font-family: var(--ff-primary); background: var(--clr-bg); color: var(--c
 .network-nodes { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: var(--space-md); justify-content: center; padding: var(--space-md) 0; }
 .net-node { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; transition: transform var(--dur) var(--ease); }
 .net-node:hover { transform: translateY(-4px); }
-.net-node-avatar { width: 54px; height: 54px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; color: #fff; position: relative; transition: box-shadow var(--dur) var(--ease); }
+.net-node-avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; color: #fff; position: relative; transition: box-shadow var(--dur) var(--ease); }
 .net-node:hover .net-node-avatar { box-shadow: 0 0 20px rgba(88,166,255,0.3); }
 .net-node-status { position: absolute; bottom: 1px; right: 1px; width: 14px; height: 14px; border-radius: 50%; border: 2.5px solid var(--clr-surface); }
 .net-node-status.active { background: var(--clr-success); box-shadow: 0 0 6px var(--clr-success); }
 .net-node-status.busy { background: var(--clr-warning); }
 .net-node-status.away { background: var(--clr-text-dim); }
 .net-node-status.offline { background: var(--clr-text-dim); opacity: 0.5; }
-.net-node-name { font-size: 0.7rem; font-weight: 600; color: var(--clr-text-muted); text-align: center; max-width: 80px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.net-node-tasks { font-size: 0.6rem; color: var(--clr-text-dim); font-family: var(--ff-mono); }
+.net-node-name { font-size: 0.65rem; font-weight: 600; color: var(--clr-text-muted); text-align: center; max-width: 70px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.net-node-tasks { font-size: 0.55rem; color: var(--clr-text-dim); font-family: var(--ff-mono); }
 
 /* ── Twin Grid ── */
-.twin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: var(--space-xl); }
+.twin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: var(--space-lg); }
 
 /* ── Twin Card ── */
 .twin-card { border-radius: var(--radius-xl); border: 1px solid var(--glass-border); overflow: hidden; transition: all 0.35s var(--ease); }
 .twin-card:hover { border-color: var(--clr-accent-2); box-shadow: var(--shadow-glow-blue); transform: translateY(-3px); }
 
 .twin-card-header { padding: var(--space-lg) var(--space-lg) var(--space-md); display: flex; gap: var(--space-md); align-items: flex-start; }
-.tc-avatar { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.15rem; color: #fff; flex-shrink: 0; position: relative; }
+.tc-avatar { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; color: #fff; flex-shrink: 0; position: relative; }
 .tc-avatar .status-ring { position: absolute; inset: -3px; border-radius: 50%; border: 2px solid transparent; }
 .tc-avatar .status-ring.active { border-color: var(--clr-success); }
 .tc-avatar .status-ring.busy { border-color: var(--clr-warning); }
 .tc-info { flex: 1; min-width: 0; }
-.tc-name { font-family: var(--ff-display); font-weight: 700; font-size: 1.05rem; }
-.tc-role { font-size: 0.78rem; color: var(--clr-accent-2); font-weight: 500; margin-top: 2px; }
+.tc-name { font-family: var(--ff-display); font-weight: 700; font-size: 1rem; }
+.tc-role { font-size: 0.75rem; color: var(--clr-accent-2); font-weight: 500; margin-top: 2px; }
 .tc-meta-row { display: flex; flex-wrap: wrap; gap: var(--space-sm) var(--space-md); margin-top: 6px; }
 .tc-meta-item { font-size: 0.7rem; color: var(--clr-text-dim); display: flex; align-items: center; gap: 4px; }
 
 /* Twin Card Sections */
-.twin-section { padding: 0 var(--space-lg); margin-bottom: var(--space-md); }
+.twin-section { padding: 0 var(--space-md); margin-bottom: var(--space-md); }
 .twin-section-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--clr-text-dim); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
 .twin-section-label svg { width: 14px; height: 14px; }
 
@@ -192,7 +192,7 @@ body { font-family: var(--ff-primary); background: var(--clr-bg); color: var(--c
 .mini-tl-text { font-size: 0.76rem; color: var(--clr-text-muted); margin-top: 2px; }
 
 /* Twin card footer */
-.twin-card-footer { padding: var(--space-md) var(--space-lg); border-top: 1px solid var(--clr-border); display: flex; align-items: center; justify-content: space-between; }
+.twin-card-footer { padding: var(--space-sm) var(--space-md); border-top: 1px solid var(--clr-border); display: flex; align-items: center; justify-content: space-between; }
 .twin-card-footer .tc-skills { display: flex; flex-wrap: wrap; gap: 4px; }
 .twin-card-footer .tc-actions { display: flex; gap: var(--space-sm); }
 
