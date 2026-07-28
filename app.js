@@ -45,6 +45,8 @@ const PEOPLE_DATA = [
     actionItems: [
       { text: 'Finalize volunteer role assignments (dual-leadership model)', status: 'in-progress', due: '2026-07-20', source: 'Promised to Amara on Jul 16' },
       { text: 'Review Amanda\'s Canva pitchdeck', status: 'in-progress', due: '2026-07-30', source: 'Acknowledged Jun 30' },
+      { text: 'Review ESA Earth Action Info Day video for funding leads', status: 'todo', due: '', source: 'Action Items (May 11)' },
+      { text: 'San Francisco pitching tour (YC Startup School)', status: 'todo', due: '2026-07-26', source: 'Action Items (Jun 7)' },
       { text: 'SF trip — meet space, climate, and VC entities', status: 'done', due: '2026-07-28', source: 'Announced Jul 4' },
       { text: 'Refine Mission Statement re: "focus on girls" wording', status: 'todo', due: '', source: 'MoMs Apr 25 — Action Item' },
       { text: 'Fix website: session booking & PayPal donation modules', status: 'todo', due: '', source: 'MoMs Apr 25 — Immediate' },
@@ -474,7 +476,10 @@ const MEETINGS = [
 
 // ─── TASKS ───
 const DEFAULT_TASKS = [
-  { id: uid(), title: 'SF Trip — Networking & Meetings', description: 'Meet space/climate/VC entities in San Francisco. Attend Builders Night.', assignee: 'Jim Volp', coLead: 'Advaith', priority: 'critical', status: 'done', dueDate: '2026-07-28', category: 'events', created: '2026-07-04' },
+  { id: uid(), title: 'SF Trip — Pitching & Meetings', description: 'Meet EO entities (Planet, Spire) & Tech Philanthropies in SF during YC Startup School.', assignee: 'Jim Volp', coLead: 'Advaith', priority: 'critical', status: 'todo', dueDate: '2026-07-28', category: 'events', created: '2026-06-07' },
+  { id: uid(), title: 'Website Proofreading', description: 'Finalise the new website (www.space4climate.org), mainly proofread.', assignee: '', coLead: '', priority: 'medium', status: 'todo', dueDate: '', category: 'content', created: '2026-05-11' },
+  { id: uid(), title: 'Review ESA Video', description: 'Find Clement Albergel\'s presentation in ESA Earth Action Info Day video to look for relevant info for funding.', assignee: 'Jim Volp', coLead: '', priority: 'medium', status: 'todo', dueDate: '', category: 'partnerships', created: '2026-05-11' },
+  { id: uid(), title: 'Review GDocs Concept Folder', description: 'Explore the GoogleDocs repository (concept folder). Request access from Jim.', assignee: '', coLead: '', priority: 'low', status: 'todo', dueDate: '', category: 'general', created: '2026-05-11' },
   { id: uid(), title: 'Finalize & Distribute Pitchdeck', description: 'Review Amanda\'s Canva pitchdeck, get team feedback.', assignee: 'Amanda Savita Alexander', coLead: 'Jim Volp', priority: 'high', status: 'in-progress', dueDate: '2026-07-30', category: 'content', created: '2026-06-30' },
   { id: uid(), title: 'UNIVAST Bootcamp — Represent S4C', description: 'Joshua attends in August. Provide feedback. Explore Nigerian Space Agency collaboration.', assignee: 'Joshua', coLead: '', priority: 'high', status: 'todo', dueDate: '2026-08-31', category: 'partnerships', created: '2026-07-07' },
   { id: uid(), title: 'LinkedIn & California Outreach', description: 'Share S4C on LinkedIn. Forward to California contacts. JustSpace Alliance Slack.', assignee: 'Amanda Savita Alexander', coLead: '', priority: 'medium', status: 'in-progress', dueDate: '', category: 'outreach', created: '2026-07-07' },
@@ -521,6 +526,8 @@ const TIMELINE_EVENTS = [
   { date: '2026-04-25', title: 'Joint Board Meeting held', person: 'Jim Volp', desc: '1h 25m meeting with 10 participants. Set 6-month goal: world-class repeatable workshop delivery. Discussed Kigali (Note: Kigali event later postponed to an unknown date starting June), AI localisation, Discord transition, ANBI registration.', quote: 'The project stands at a pivotal "big opportunity" phase.' },
   { date: '2026-04-25', title: 'Discord transition decided', person: 'Jim Volp', desc: 'Board decided to move from Slack/WhatsApp to Discord for better volunteer engagement.', quote: '' },
   { date: '2026-04-25', title: 'AEB partnership confirmed', person: 'Danilo Sakay', desc: 'Brazilian Space Agency already a supporter, looking for content providers after GLOBE defunding.', quote: '' },
+  { date: '2026-05-11', title: 'Action Items listed', person: 'Jim Volp', desc: 'Requested help with website proofreading, ESA video review, and opened GDocs repository.', quote: '' },
+  { date: '2026-06-07', title: 'SF Pitch Tour Announced', person: 'Jim Volp', desc: 'Planned visits to EO companies and foundations during YC Startup School.', quote: 'The San Francisco Bay Area is an ideal region to seek financial support.' },
   { date: '2026-06-29', title: 'Amanda volunteers as External Engagement Lead', person: 'Amanda Savita Alexander', desc: 'Offered to lead proposals, grants, MOUs.', quote: 'Happy to take on a general Lead, Sponsorships & External Engagement role.' },
   { date: '2026-06-29', title: 'Project_Info.pdf shared', person: 'Jim Volp', desc: 'Full slidedeck shared. Lisa Vitaris introduced as Honorary Board.', quote: '' },
   { date: '2026-06-30', title: 'Canva Pitchdeck created', person: 'Amanda Savita Alexander', desc: 'Built from Project_Info.pdf, Google Drive, and websites.', quote: '' },
@@ -539,6 +546,8 @@ const TIMELINE_EVENTS = [
 
 const ACTIVITY_FEED = [
   { person: 'Jim Volp', text: 'Facilitated Joint Board Meeting. Set 6-month goals. 10 participants.', time: '2026-04-25T09:24:00' },
+  { person: 'Jim Volp', text: 'Requested help with website and ESA video review in #action_items.', time: '2026-05-11T11:58:00' },
+  { person: 'Jim Volp', text: 'Announced SF pitch trip to target EO companies and Philanthropies.', time: '2026-06-07T09:50:00' },
   { person: 'Jim Volp', text: 'Dual-leadership model announced. Promised role overview.', time: '2026-07-16T16:50:00' },
   { person: 'Amara', text: 'Asked about open leadership/volunteer roles.', time: '2026-07-15T02:32:00' },
   { person: 'Amanda Savita Alexander', text: 'ASDA Board Observer — not selected.', time: '2026-07-09T02:57:00' },
