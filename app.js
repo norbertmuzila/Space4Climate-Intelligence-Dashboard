@@ -48,7 +48,7 @@ const PEOPLE_DATA = [
       { text: 'SF trip — meet space, climate, and VC entities', status: 'done', due: '2026-07-28', source: 'Announced Jul 4' },
       { text: 'Refine Mission Statement re: "focus on girls" wording', status: 'todo', due: '', source: 'MoMs Apr 25 — Action Item' },
       { text: 'Fix website: session booking & PayPal donation modules', status: 'todo', due: '', source: 'MoMs Apr 25 — Immediate' },
-      { text: 'Kigali promo pack: QR code, stickers, micro-brochure, leaflet', status: 'todo', due: '', source: 'MoMs Apr 25 — Before Kigali' },
+      { text: 'Kigali promo pack (Event postponed to a date not yet known)', status: 'done', due: '', source: 'MoMs Apr 25 / Update: Postponed' },
       { text: 'Beta-test Space module (2-3 online test runs)', status: 'todo', due: '', source: 'MoMs Apr 25 — Immediate' },
       { text: 'Setup Discord for volunteer community', status: 'done', due: '2026-04-25', source: 'MoMs Apr 25 — Immediate (done)' },
       { text: 'Register as Dutch ANBI non-profit (notary → CoC)', status: 'todo', due: '', source: 'MoMs Apr 25 — Immediate' },
@@ -244,7 +244,7 @@ const PEOPLE_DATA = [
     skills: ['Aerospace Engineering', 'Propulsion & Energetics', 'CFD', 'Combustion', 'Applied Mechanics'],
     bio: 'Aerospace Engineer specializing in Propulsion & Energetics, CFD, Combustion, Applied Mechanics.',
     notes: 'Participated in the Joint Board Meeting on Apr 25.', quotes: [],
-    actionItems: [{ text: 'Provide contacts in Rwanda/Kigali for outreach', status: 'todo', due: '', source: 'MoMs Apr 25 — All members' }],
+    actionItems: [{ text: 'Provide contacts in Rwanda/Kigali (Event postponed to unknown date)', status: 'done', due: '', source: 'MoMs Apr 25 — All members' }],
     personalTimeline: [{ date: '2026-04-25', text: 'Participated in Joint Board Meeting.' }],
     connections: [{ to: 'Jim Volp', reason: 'Board meeting participant' }]
   },
@@ -291,7 +291,7 @@ const PEOPLE_DATA = [
     skills: ['PhD Researcher', 'Earth Observation', 'Space', 'Top 100 Women in Aerospace'],
     bio: 'PhD Researcher in Earth Observation & Space. #3 in Top 100 Women in Aerospace & Aviation 2025.',
     notes: 'Participated in Joint Board Meeting on Apr 25.', quotes: [],
-    actionItems: [{ text: 'Provide contacts in Rwanda/Kigali for outreach', status: 'todo', due: '', source: 'MoMs Apr 25' }],
+    actionItems: [{ text: 'Provide contacts in Rwanda/Kigali (Event postponed)', status: 'done', due: '', source: 'MoMs Apr 25' }],
     personalTimeline: [{ date: '2026-04-25', text: 'Participated in Joint Board Meeting.' }],
     connections: [{ to: 'Jim Volp', reason: 'Board meeting participant' }]
   },
@@ -301,7 +301,7 @@ const PEOPLE_DATA = [
     skills: ['Entrepreneurship', 'Former ESA Chief Scientist', 'Robotic & Human Exploration'],
     bio: 'Entrepreneur at Entrespatiaux. Former Chief Scientist for Robotic and Human Exploration at ESA.',
     notes: 'Participated in Joint Board Meeting on Apr 25.', quotes: [],
-    actionItems: [{ text: 'Provide contacts in Rwanda/Kigali for outreach', status: 'todo', due: '', source: 'MoMs Apr 25' }],
+    actionItems: [{ text: 'Provide contacts in Rwanda/Kigali (Event postponed)', status: 'done', due: '', source: 'MoMs Apr 25' }],
     personalTimeline: [{ date: '2026-04-25', text: 'Participated in Joint Board Meeting.' }],
     connections: [{ to: 'Jim Volp', reason: 'Board Advisor, ex-ESA' }]
   },
@@ -311,7 +311,7 @@ const PEOPLE_DATA = [
     skills: ['ISS Operations', 'Planetary Defense', 'Public Education & Outreach', 'SpaceKind'],
     bio: 'ISS Operations. Planetary Defense. Public Education & Outreach. SpaceKind.',
     notes: 'Participated in Joint Board Meeting on Apr 25 (listed as "Alex" in MoMs).', quotes: [],
-    actionItems: [{ text: 'Provide contacts in Rwanda/Kigali', status: 'todo', due: '', source: 'MoMs Apr 25' }],
+    actionItems: [{ text: 'Provide contacts in Rwanda/Kigali (Event postponed)', status: 'done', due: '', source: 'MoMs Apr 25' }],
     personalTimeline: [{ date: '2026-04-25', text: 'Participated in Joint Board Meeting.' }],
     connections: [{ to: 'Jim Volp', reason: 'Board meeting participant' }]
   },
@@ -336,7 +336,7 @@ const PEOPLE_DATA = [
     skills: ['Econnects Association', 'Marketing', 'MDPI'],
     bio: 'Econnects Association. Marketing Specialist at MDPI.',
     notes: 'Participated in Joint Board Meeting on Apr 25 (listed as "Milica" in MoMs).', quotes: [],
-    actionItems: [{ text: 'Provide contacts in Rwanda/Kigali', status: 'todo', due: '', source: 'MoMs Apr 25' }],
+    actionItems: [{ text: 'Provide contacts in Rwanda/Kigali (Event postponed)', status: 'done', due: '', source: 'MoMs Apr 25' }],
     personalTimeline: [{ date: '2026-04-25', text: 'Participated in Joint Board Meeting.' }],
     connections: [{ to: 'Jim Volp', reason: 'Board meeting participant' }]
   },
@@ -379,7 +379,7 @@ const PEOPLE_DATA = [
     skills: ['Teaching', 'Translation', 'Ethereum/Blockchain'],
     bio: 'Teacher / Translator / Senior Advisor at ethereum.com.tr.',
     notes: 'Participated in Joint Board Meeting on Apr 25 (listed as "Koray" in MoMs).', quotes: [],
-    actionItems: [{ text: 'Provide contacts in Rwanda/Kigali', status: 'todo', due: '', source: 'MoMs Apr 25' }],
+    actionItems: [{ text: 'Provide contacts in Rwanda/Kigali (Event postponed)', status: 'done', due: '', source: 'MoMs Apr 25' }],
     personalTimeline: [{ date: '2026-04-25', text: 'Participated in Joint Board Meeting.' }],
     connections: [{ to: 'Jim Volp', reason: 'Board meeting participant' }]
   },
@@ -388,7 +388,7 @@ const PEOPLE_DATA = [
     board: 'advisors', timezone: '', location: '', status: 'active',
     skills: [], bio: '',
     notes: 'Listed as participant in the Apr 25 Joint Board Meeting. No further details in the documents.', quotes: [],
-    actionItems: [{ text: 'Provide contacts in Rwanda/Kigali', status: 'todo', due: '', source: 'MoMs Apr 25' }],
+    actionItems: [{ text: 'Provide contacts in Rwanda/Kigali (Event postponed)', status: 'done', due: '', source: 'MoMs Apr 25' }],
     personalTimeline: [{ date: '2026-04-25', text: 'Participated in Joint Board Meeting.' }],
     connections: [{ to: 'Jim Volp', reason: 'Board meeting participant' }]
   },
@@ -425,9 +425,9 @@ const MEETINGS = [
         ]
       },
       {
-        title: '3. The "Kigali Opportunity" (GLOC2026)',
+        title: '3. The "Kigali Opportunity" (GLOC2026) — POSTPONED',
         points: [
-          'GLOC2026 in Kigali, Rwanda = HUGE opportunity to formalise partnerships.',
+          'GLOC2026 in Kigali, Rwanda = HUGE opportunity to formalise partnerships. *UPDATE: Postponed to a date not yet known (starting June).*',
           'Create promotional "pack": QR code stickers, micro-brochure business cards, 1/3 A4 leaflets.',
           'Leverage AIAA sponsorship for high-level industry conversations.',
           'Partner networking with AIAA, World Space Week, WIA for "top-down" endorsements from ESA, NASA, CNSA.',
@@ -447,7 +447,7 @@ const MEETINGS = [
       {
         title: '5. Roadmap — Concrete Steps',
         points: [
-          'Do 2-3 online test runs of Space module before Kigali.',
+          'Do 2-3 online test runs of Space module before Kigali (Note: Event postponed).',
           'Finish Climate module before end of June.',
           'Develop next steps with Brazilian Space Agency.',
           'Review + update website. Find booking tool.',
@@ -462,9 +462,8 @@ const MEETINGS = [
     actionItems: [
       { text: 'Refine Mission Statement re: "focus on girls" and diversity', responsible: 'Jim Volp', deadline: 'Upcoming' },
       { text: 'Fix session booking & PayPal on website', responsible: 'Jim Volp', deadline: 'Immediate' },
-      { text: 'Create Kigali promo pack (QR, stickers, micro-brochure, leaflet)', responsible: 'Jim Volp', deadline: 'Before Kigali' },
-      { text: 'Beta-test Space module (2-3 online test runs)', responsible: 'Jim Volp', deadline: 'Immediate' },
-      { text: 'Provide contacts in Rwanda/Kigali for outreach', responsible: 'All', deadline: 'Immediate' },
+      { text: 'Create Kigali promo pack (QR, stickers, micro-brochure, leaflet) — CANCELLED (Event Postponed)', responsible: 'Jim Volp', deadline: 'Postponed' },
+      { text: 'Provide contacts in Rwanda/Kigali for outreach — CANCELLED (Event Postponed)', responsible: 'All', deadline: 'Postponed' },
       { text: 'Mention S4C during AIAA conversations (strategic advocacy)', responsible: 'Lisa + All', deadline: 'Ongoing' },
       { text: 'Transition communication to Discord', responsible: 'Jim Volp', deadline: 'Immediate (Done)' },
       { text: 'Register as Dutch ANBI non-profit', responsible: 'Jim Volp', deadline: 'Immediate' },
@@ -484,9 +483,9 @@ const DEFAULT_TASKS = [
   { id: uid(), title: 'Teacher Marketing Campaign', description: 'Marketing plan to convince teachers to sign up classrooms.', assignee: '', coLead: '', priority: 'high', status: 'todo', dueDate: '', category: 'outreach', created: '2026-07-07' },
   { id: uid(), title: 'Fix Website — Booking & PayPal', description: 'Fix session booking and PayPal donation modules. Critical.', assignee: 'Jim Volp', coLead: '', priority: 'critical', status: 'todo', dueDate: '', category: 'tech', created: '2026-04-25' },
   { id: uid(), title: 'Dutch ANBI Non-Profit Registration', description: 'Register via notary → Chamber of Commerce. Tax benefits. Then pursue US 501(c)(3).', assignee: 'Jim Volp', coLead: '', priority: 'high', status: 'todo', dueDate: '', category: 'operations', created: '2026-04-25' },
-  { id: uid(), title: 'Beta-Test Space Module (2-3 runs)', description: 'Online test runs before Kigali to ensure delivery-ready.', assignee: 'Jim Volp', coLead: '', priority: 'high', status: 'todo', dueDate: '', category: 'content', created: '2026-04-25' },
+  { id: uid(), title: 'Beta-Test Space Module (2-3 runs)', description: 'Online test runs to ensure delivery-ready (formerly before Kigali).', assignee: 'Jim Volp', coLead: '', priority: 'high', status: 'todo', dueDate: '', category: 'content', created: '2026-04-25' },
   { id: uid(), title: 'Finish Climate Module', description: 'Complete the Climate Fresk-style module.', assignee: 'Jim Volp', coLead: '', priority: 'high', status: 'todo', dueDate: '2026-06-30', category: 'content', created: '2026-04-25' },
-  { id: uid(), title: 'Kigali GLOC2026 Promo Pack', description: 'QR code stickers, micro-brochure business cards, 1/3 A4 leaflets.', assignee: 'Jim Volp', coLead: '', priority: 'high', status: 'todo', dueDate: '', category: 'content', created: '2026-04-25' },
+  { id: uid(), title: 'Kigali GLOC2026 Promo Pack', description: 'Event postponed to a date not yet known (starting June). Task cancelled.', assignee: 'Jim Volp', coLead: '', priority: 'high', status: 'done', dueDate: '', category: 'content', created: '2026-04-25' },
   { id: uid(), title: 'Refine Mission Statement', description: 'Update wording re: "focus on girls" and diversity per board feedback.', assignee: 'Jim Volp', coLead: '', priority: 'medium', status: 'todo', dueDate: '', category: 'general', created: '2026-04-25' },
   { id: uid(), title: 'Setup Discord Community', description: 'Transition from Slack/WhatsApp to Discord for volunteer engagement.', assignee: 'Jim Volp', coLead: '', priority: 'high', status: 'done', dueDate: '2026-04-25', category: 'tech', created: '2026-04-25' },
   { id: uid(), title: 'Create Sponsorship Package', description: 'Sponsors tell their story. Supporters / Partners / Sponsors tiers.', assignee: '', coLead: '', priority: 'medium', status: 'todo', dueDate: '', category: 'partnerships', created: '2026-04-25' },
@@ -519,7 +518,7 @@ const PARTNERSHIPS = [
 ];
 
 const TIMELINE_EVENTS = [
-  { date: '2026-04-25', title: 'Joint Board Meeting held', person: 'Jim Volp', desc: '1h 25m meeting with 10 participants. Set 6-month goal: world-class repeatable workshop delivery. Discussed Kigali, AI localisation, Discord transition, ANBI registration.', quote: 'The project stands at a pivotal "big opportunity" phase.' },
+  { date: '2026-04-25', title: 'Joint Board Meeting held', person: 'Jim Volp', desc: '1h 25m meeting with 10 participants. Set 6-month goal: world-class repeatable workshop delivery. Discussed Kigali (Note: Kigali event later postponed to an unknown date starting June), AI localisation, Discord transition, ANBI registration.', quote: 'The project stands at a pivotal "big opportunity" phase.' },
   { date: '2026-04-25', title: 'Discord transition decided', person: 'Jim Volp', desc: 'Board decided to move from Slack/WhatsApp to Discord for better volunteer engagement.', quote: '' },
   { date: '2026-04-25', title: 'AEB partnership confirmed', person: 'Danilo Sakay', desc: 'Brazilian Space Agency already a supporter, looking for content providers after GLOBE defunding.', quote: '' },
   { date: '2026-06-29', title: 'Amanda volunteers as External Engagement Lead', person: 'Amanda Savita Alexander', desc: 'Offered to lead proposals, grants, MOUs.', quote: 'Happy to take on a general Lead, Sponsorships & External Engagement role.' },
