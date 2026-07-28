@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Space4Climate — Intelligence Dashboard</title>
+  <meta name="description" content="Space4Climate.org Intelligence Dashboard — a living replica of every team member, their words, commitments, action items and interconnections." />
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+
+  <!-- ── Ambient background ── -->
+  <div class="ambient-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <!-- ── Header ── -->
+  <header id="app-header">
+    <div class="header-left">
+      <img src="logo.png" alt="Space4Climate" class="header-logo" />
+      <div>
+        <h1>Intelligence Dashboard</h1>
+        <p class="subtitle">Living Team Replica &amp; Command Center</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="admin-status" id="adminStatus">
+        <button class="btn btn-sm btn-ghost" id="btnLogin" title="Admin Login">🔒 View Only</button>
+      </div>
+      <div class="search-box" id="searchBox">
+        <svg class="search-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8ZM2 8a6 6 0 1 1 10.89 3.476l4.817 4.817a1 1 0 0 1-1.414 1.414l-4.816-4.816A6 6 0 0 1 2 8Z" clip-rule="evenodd"/></svg>
+        <input type="text" id="globalSearch" placeholder="Search people, tasks, quotes…" autocomplete="off" />
+      </div>
+      <button class="btn-icon" id="btnThemeToggle" title="Toggle theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z"/></svg>
+      </button>
+      <div class="datetime" id="liveDateTime"></div>
+    </div>
+  </header>
+
+  <!-- ── Tab Navigation ── -->
+  <nav id="tab-bar" aria-label="Main navigation">
+    <button class="tab active" data-tab="twin">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM6 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM1.49 15.326a.78.78 0 0 1-.358-.442 3 3 0 0 1 4.308-3.516 6.484 6.484 0 0 0-1.905 3.959c-.023.222-.014.442.025.654a4.97 4.97 0 0 1-2.07-.655ZM16.44 15.98a4.97 4.97 0 0 0 2.07-.654.78.78 0 0 0 .357-.442 3 3 0 0 0-4.308-3.517 6.484 6.484 0 0 1 1.907 3.96 2.32 2.32 0 0 1-.026.654ZM18 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM5.304 16.19a.844.844 0 0 1-.277-.71 5 5 0 0 1 9.947 0 .843.843 0 0 1-.277.71A6.975 6.975 0 0 1 10 18a6.974 6.974 0 0 1-4.696-1.81Z"/></svg>
+      Team
+    </button>
+    <button class="tab" data-tab="overview">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 0 0-1.414 0l-7 7a1 1 0 0 0 1.414 1.414L4 10.414V17a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-6.586l.293.293a1 1 0 0 0 1.414-1.414l-7-7Z"/></svg>
+      Overview
+    </button>
+    <button class="tab" data-tab="tasks">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 4.75A.75.75 0 0 1 6.75 4h10.5a.75.75 0 0 1 0 1.5H6.75A.75.75 0 0 1 6 4.75ZM6 10a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H6.75A.75.75 0 0 1 6 10Zm0 5.25a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H6.75a.75.75 0 0 1-.75-.75ZM1.99 4.75a1 1 0 0 1 1-1h.01a1 1 0 0 1 0 2h-.01a1 1 0 0 1-1-1Zm0 5.25a1 1 0 0 1 1-1h.01a1 1 0 0 1 0 2h-.01a1 1 0 0 1-1-1Zm1 4.25a1 1 0 0 0 0 2h.01a1 1 0 0 0 0-2h-.01Z" clip-rule="evenodd"/></svg>
+      Tasks
+    </button>
+    <button class="tab" data-tab="planner">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.75 2a.75.75 0 0 1 .75.75V4h7V2.75a.75.75 0 0 1 1.5 0V4h.25A2.75 2.75 0 0 1 18 6.75v8.5A2.75 2.75 0 0 1 15.25 18H4.75A2.75 2.75 0 0 1 2 15.25v-8.5A2.75 2.75 0 0 1 4.75 4H5V2.75A.75.75 0 0 1 5.75 2Zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75Z" clip-rule="evenodd"/></svg>
+      Planner
+    </button>
+    <button class="tab" data-tab="timeline">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-13a.75.75 0 0 0-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 0 0 0-1.5h-3.25V5Z" clip-rule="evenodd"/></svg>
+      Timeline
+    </button>
+  </nav>
+
+  <!-- ── Main Content ── -->
+  <main id="main-content">
+
+    <!-- TEAM TAB -->
+    <section class="tab-panel active" id="panel-twin">
+      <!-- Network Visualization Header -->
+      <div class="twin-header">
+        <div class="twin-header-left">
+          <h2>Team Intelligence Overview</h2>
+          <p class="twin-subtitle">Each person's words, commitments, action items &amp; connections — extracted from organizational documents</p>
+        </div>
+        <div class="twin-controls">
+          <button class="btn btn-primary admin-only" id="btnAddPerson" style="display:none;">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path d="M10 5a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2h-3v3a1 1 0 1 1-2 0v-3H6a1 1 0 1 1 0-2h3V6a1 1 0 0 1 1-1Z"/></svg>
+            Add Person
+          </button>
+        </div>
+      </div>
+
+      <!-- Connection Map -->
+      <div class="connection-map glass" id="connectionMap">
+        <div class="connection-map-title">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path d="M13 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM18 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM14 15a4 4 0 0 0-8 0v1h8v-1ZM6 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM16.93 15c.06-.33.07-.66.02-1a5.02 5.02 0 0 0-3.36-3.98 3.98 3.98 0 0 1 1.75 3.31V15h1.59ZM4.65 15v-.67c0-1.26.55-2.4 1.43-3.18A5.02 5.02 0 0 0 2.73 15h1.92Z"/></svg>
+          Team Network &amp; Connections
+        </div>
+        <canvas id="networkCanvas"></canvas>
+        <div class="network-nodes" id="networkNodes"></div>
+      </div>
+
+      <!-- Twin Cards -->
+      <div class="twin-grid" id="twinGrid">
+        <!-- rendered by JS -->
+      </div>
+    </section>
+
+    <!-- OVERVIEW TAB -->
+    <section class="tab-panel" id="panel-overview">
+      <div class="kpi-grid" id="kpiGrid"></div>
+      <div class="overview-cols">
+        <div class="card glass" id="activityCard">
+          <div class="card-header">
+            <h2>Recent Activity</h2>
+            <span class="chip chip-blue">Live Feed</span>
+          </div>
+          <ul class="activity-feed" id="activityFeed"></ul>
+        </div>
+        <div class="card glass" id="linksCard">
+          <div class="card-header"><h2>Partnerships &amp; Key Links</h2></div>
+          <div class="partnership-list" id="partnershipList"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TASKS TAB -->
+    <section class="tab-panel" id="panel-tasks">
+      <div class="section-header">
+        <h2>Deliverables &amp; Tasks</h2>
+        <div class="task-controls">
+          <div class="filter-chips" id="taskFilterChips">
+            <button class="chip chip-filter active" data-filter="all">All</button>
+            <button class="chip chip-filter" data-filter="todo">To Do</button>
+            <button class="chip chip-filter" data-filter="in-progress">In Progress</button>
+            <button class="chip chip-filter" data-filter="done">Done</button>
+          </div>
+          <button class="btn btn-primary admin-only" id="btnAddTask" style="display:none;">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path d="M10 5a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2h-3v3a1 1 0 1 1-2 0v-3H6a1 1 0 1 1 0-2h3V6a1 1 0 0 1 1-1Z"/></svg>
+            New Task
+          </button>
+        </div>
+      </div>
+      <div class="task-board" id="taskBoard"></div>
+    </section>
+
+    <!-- PLANNER TAB -->
+    <section class="tab-panel" id="panel-planner">
+      <div class="section-header">
+        <h2>Weekly Planner</h2>
+        <div class="planner-nav">
+          <button class="btn-icon" id="plannerPrev" title="Previous week">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd"/></svg>
+          </button>
+          <span id="plannerWeekLabel" class="planner-week-label"></span>
+          <button class="btn-icon" id="plannerNext" title="Next week">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/></svg>
+          </button>
+          <button class="btn btn-sm btn-ghost admin-only" id="btnAddPlannerEvent" style="display:none;">+ Add Event</button>
+        </div>
+      </div>
+      <div class="planner-grid" id="plannerGrid"></div>
+    </section>
+
+    <!-- TIMELINE TAB -->
+    <section class="tab-panel" id="panel-timeline">
+      <div class="section-header">
+        <h2>Project Timeline</h2>
+        <div class="filter-chips" id="timelineFilterChips">
+          <button class="chip chip-filter active" data-tl-filter="all">All</button>
+        </div>
+      </div>
+      <div class="timeline" id="timelineList"></div>
+    </section>
+  </main>
+
+  <!-- ── MODAL: Login ── -->
+  <div class="modal-overlay" id="modalLogin">
+    <div class="modal glass">
+      <div class="modal-header">
+        <h3>🔐 Admin Login</h3>
+        <button class="btn-icon modal-close" data-close="modalLogin">&times;</button>
+      </div>
+      <p style="font-size:0.84rem; color:var(--clr-text-muted); margin-bottom:var(--space-lg);">Only authorized administrators can make changes. Enter your name and passphrase.</p>
+      <form id="formLogin" autocomplete="off">
+        <div class="form-group">
+          <label for="loginName">Your Name</label>
+          <select id="loginName">
+            <option value="">— Select —</option>
+            <option value="Jim Volp">Jim Volp</option>
+            <option value="Norbert">Norbert</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="loginPass">Passphrase</label>
+          <input type="password" id="loginPass" placeholder="Enter admin passphrase" required />
+        </div>
+        <div id="loginError" style="font-size:0.78rem;color:var(--clr-danger);margin-bottom:var(--space-sm);display:none;">Invalid credentials.</div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" data-close="modalLogin">Cancel</button>
+          <button type="submit" class="btn btn-primary">Login</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── MODAL: Person Detail Flyout ── -->
+  <div class="flyout-overlay" id="flyoutPerson">
+    <div class="flyout glass">
+      <button class="btn-icon flyout-close" data-close-flyout="flyoutPerson">&times;</button>
+      <div id="flyoutPersonContent"></div>
+    </div>
+  </div>
+
+  <!-- ── MODAL: Add/Edit Person ── -->
+  <div class="modal-overlay" id="modalPerson">
+    <div class="modal glass">
+      <div class="modal-header">
+        <h3 id="modalPersonTitle">Add Team Member</h3>
+        <button class="btn-icon modal-close" data-close="modalPerson">&times;</button>
+      </div>
+      <form id="formPerson" autocomplete="off">
+        <div class="form-group">
+          <label for="personName">Full Name *</label>
+          <input type="text" id="personName" required />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="personRole">Role / Title</label>
+            <input type="text" id="personRole" />
+          </div>
+          <div class="form-group">
+            <label for="personTimezone">Timezone</label>
+            <select id="personTimezone">
+              <option value="">— Select —</option>
+              <option value="UTC-8">UTC−8 (PST)</option><option value="UTC-7">UTC−7 (MST)</option>
+              <option value="UTC-6">UTC−6 (CST)</option><option value="UTC-5">UTC−5 (EST)</option>
+              <option value="UTC-3">UTC−3 (BRT)</option>
+              <option value="UTC+0">UTC+0 (GMT)</option><option value="UTC+1">UTC+1 (CET)</option>
+              <option value="UTC+2">UTC+2 (EET)</option><option value="UTC+3">UTC+3 (MSK)</option>
+              <option value="UTC+5:30">UTC+5:30 (IST)</option>
+              <option value="UTC+8">UTC+8 (SGT)</option><option value="UTC+9">UTC+9 (JST)</option>
+              <option value="UTC+10">UTC+10 (AEST)</option><option value="UTC+12">UTC+12 (NZST)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="personLocation">Location</label>
+            <input type="text" id="personLocation" />
+          </div>
+          <div class="form-group">
+            <label for="personStatus">Status</label>
+            <select id="personStatus">
+              <option value="active">Active</option>
+              <option value="busy">Busy</option>
+              <option value="away">Away</option>
+              <option value="offline">Offline</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="personSkills">Key Skills (comma-separated)</label>
+          <input type="text" id="personSkills" placeholder="e.g. Leadership, Marketing, Design" />
+        </div>
+        <div class="form-group">
+          <label for="personNotes">Notes</label>
+          <textarea id="personNotes" rows="3"></textarea>
+        </div>
+        <input type="hidden" id="personEditId" value="" />
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" data-close="modalPerson">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── MODAL: Add/Edit Task ── -->
+  <div class="modal-overlay" id="modalTask">
+    <div class="modal glass">
+      <div class="modal-header">
+        <h3 id="modalTaskTitle">New Task</h3>
+        <button class="btn-icon modal-close" data-close="modalTask">&times;</button>
+      </div>
+      <form id="formTask" autocomplete="off">
+        <div class="form-group">
+          <label for="taskTitle">Title *</label>
+          <input type="text" id="taskTitle" required />
+        </div>
+        <div class="form-group">
+          <label for="taskDescription">Description</label>
+          <textarea id="taskDescription" rows="3"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="taskAssignee">Assignee</label>
+            <select id="taskAssignee"><option value="">— Unassigned —</option></select>
+          </div>
+          <div class="form-group">
+            <label for="taskCoLead">Co-Lead (Dual Leadership)</label>
+            <select id="taskCoLead"><option value="">— None —</option></select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="taskPriority">Priority</label>
+            <select id="taskPriority">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+              <option value="critical">Critical</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="taskStatus">Status</label>
+            <select id="taskStatus">
+              <option value="todo">To Do</option>
+              <option value="in-progress">In Progress</option>
+              <option value="done">Done</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="taskDueDate">Due Date</label>
+            <input type="date" id="taskDueDate" />
+          </div>
+          <div class="form-group">
+            <label for="taskCategory">Category</label>
+            <select id="taskCategory">
+              <option value="general">General</option>
+              <option value="outreach">Outreach</option>
+              <option value="content">Content</option>
+              <option value="partnerships">Partnerships</option>
+              <option value="operations">Operations</option>
+              <option value="tech">Tech</option>
+              <option value="events">Events</option>
+            </select>
+          </div>
+        </div>
+        <input type="hidden" id="taskEditId" value="" />
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" data-close="modalTask">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── MODAL: Planner Event ── -->
+  <div class="modal-overlay" id="modalPlanner">
+    <div class="modal glass">
+      <div class="modal-header">
+        <h3>Add Planner Event</h3>
+        <button class="btn-icon modal-close" data-close="modalPlanner">&times;</button>
+      </div>
+      <form id="formPlanner" autocomplete="off">
+        <div class="form-group">
+          <label for="plannerEventTitle">Event Title *</label>
+          <input type="text" id="plannerEventTitle" required />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="plannerEventDate">Date *</label>
+            <input type="date" id="plannerEventDate" required />
+          </div>
+          <div class="form-group">
+            <label for="plannerEventTime">Time</label>
+            <input type="time" id="plannerEventTime" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="plannerEventPerson">Person</label>
+          <select id="plannerEventPerson"><option value="">— Anyone —</option></select>
+        </div>
+        <div class="form-group">
+          <label for="plannerEventColor">Color</label>
+          <select id="plannerEventColor">
+            <option value="blue">Blue</option>
+            <option value="green">Green</option>
+            <option value="purple">Purple</option>
+            <option value="orange">Orange</option>
+            <option value="red">Red</option>
+          </select>
+        </div>
+        <input type="hidden" id="plannerEventEditId" value="" />
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" data-close="modalPlanner">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── Toast ── -->
+  <div id="toastContainer"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
