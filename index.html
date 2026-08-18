@@ -62,6 +62,10 @@
       <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.75 2a.75.75 0 0 1 .75.75V4h7V2.75a.75.75 0 0 1 1.5 0V4h.25A2.75 2.75 0 0 1 18 6.75v8.5A2.75 2.75 0 0 1 15.25 18H4.75A2.75 2.75 0 0 1 2 15.25v-8.5A2.75 2.75 0 0 1 4.75 4H5V2.75A.75.75 0 0 1 5.75 2Zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75Z" clip-rule="evenodd"/></svg>
       Planner
     </button>
+    <button class="tab" data-tab="documents">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.5 2A1.5 1.5 0 0 0 3 3.5v13A1.5 1.5 0 0 0 4.5 18h11a1.5 1.5 0 0 0 1.5-1.5V7.621a1.5 1.5 0 0 0-.44-1.06l-4.12-4.122A1.5 1.5 0 0 0 11.378 2H4.5Zm2.25 8.5a.75.75 0 0 0 0 1.5h6.5a.75.75 0 0 0 0-1.5h-6.5Zm0 3a.75.75 0 0 0 0 1.5h6.5a.75.75 0 0 0 0-1.5h-6.5Z" clip-rule="evenodd"/></svg>
+      Documents
+    </button>
     <button class="tab" data-tab="timeline">
       <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-13a.75.75 0 0 0-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 0 0 0-1.5h-3.25V5Z" clip-rule="evenodd"/></svg>
       Timeline
@@ -85,6 +89,11 @@
             Add Person
           </button>
         </div>
+      </div>
+
+      <!-- Compact Board Filters -->
+      <div class="twin-filters" id="twinFilters">
+        <!-- rendered by JS -->
       </div>
 
       <!-- Connection Map -->
@@ -157,6 +166,23 @@
         </div>
       </div>
       <div class="planner-grid" id="plannerGrid"></div>
+    </section>
+
+    <!-- DOCUMENTS TAB -->
+    <section class="tab-panel" id="panel-documents">
+      <div class="docs-header">
+        <div>
+          <h2>📄 Space4Climate Documents</h2>
+          <p style="font-size:0.82rem; color:var(--clr-text-muted); margin-top:4px;">Official documents, meeting minutes, and reference materials</p>
+        </div>
+        <button class="btn btn-primary admin-only" id="btnUploadDoc" style="display:none;">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path d="M9.25 13.25a.75.75 0 0 0 1.5 0V4.636l2.955 3.129a.75.75 0 0 0 1.09-1.03l-4.25-4.5a.75.75 0 0 0-1.09 0l-4.25 4.5a.75.75 0 1 0 1.09 1.03L9.25 4.636v8.614Z"/><path d="M3.5 12.75a.75.75 0 0 0-1.5 0v2.5A2.75 2.75 0 0 0 4.75 18h10.5A2.75 2.75 0 0 0 18 15.25v-2.5a.75.75 0 0 0-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5Z"/></svg>
+          Upload Document
+        </button>
+      </div>
+      <div id="docsGrid" class="docs-grid">
+        <!-- rendered by JS -->
+      </div>
     </section>
 
     <!-- TIMELINE TAB -->
@@ -385,6 +411,30 @@
         <div class="modal-actions">
           <button type="button" class="btn btn-ghost" data-close="modalPlanner">Cancel</button>
           <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── MODAL: Upload Document ── -->
+  <div class="modal-overlay" id="modalUploadDoc">
+    <div class="modal glass">
+      <div class="modal-header">
+        <h3>📤 Upload Document</h3>
+        <button class="btn-icon modal-close" data-close="modalUploadDoc">&times;</button>
+      </div>
+      <form id="formUploadDoc" autocomplete="off">
+        <div class="form-group">
+          <label for="docFile">Select PDF File</label>
+          <input type="file" id="docFile" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt" required style="padding:8px;" />
+        </div>
+        <div class="form-group">
+          <label for="docName">Document Name (optional — uses filename if blank)</label>
+          <input type="text" id="docName" placeholder="e.g. Board Meeting Notes Q3" />
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" data-close="modalUploadDoc">Cancel</button>
+          <button type="submit" class="btn btn-primary">Upload</button>
         </div>
       </form>
     </div>

@@ -522,6 +522,19 @@ const PARTNERSHIPS = [
   { name: 'GLOBE Programme', desc: 'AEB looking for content after GLOBE defunding.', color: '#f85149', status: 'Context' },
 ];
 
+// ─── LEAD DETECTION ───
+function isLead(person) {
+  const r = (person.role || '').toLowerCase();
+  return r.includes('lead') || r.includes('founder') || r.includes('co-lead');
+}
+
+// ─── DOCUMENTS DATA ───
+const DEFAULT_DOCUMENTS = [
+  { id: 'doc_moms', name: 'Minutes of Meeting — Apr 25, 2026', filename: 'MoMs_Space4Climate.org_20260425.pdf', size: '374 KB', type: 'pdf', date: '2026-04-25', builtIn: true },
+  { id: 'doc_board', name: 'Board Meeting Presentation v03', filename: 'board_meeting_v03.pdf', size: '3.5 MB', type: 'pdf', date: '2026-04-25', builtIn: true },
+  { id: 'doc_whoswho', name: "Who's Who — Team Directory", filename: 'whoswho.pdf', size: '2.0 MB', type: 'pdf', date: '2026-04-25', builtIn: true },
+];
+
 const TIMELINE_EVENTS = [
   { date: '2026-04-25', title: 'Joint Board Meeting held', person: 'Jim Volp', desc: '1h 25m meeting with 10 participants. Set 6-month goal: world-class repeatable workshop delivery. Discussed Kigali (Note: Kigali event later postponed to an unknown date starting June), AI localisation, Discord transition, ANBI registration.', quote: 'The project stands at a pivotal "big opportunity" phase.' },
   { date: '2026-04-25', title: 'Discord transition decided', person: 'Jim Volp', desc: 'Board decided to move from Slack/WhatsApp to Discord for better volunteer engagement.', quote: '' },
@@ -564,13 +577,14 @@ const ACTIVITY_FEED = [
 // ════════════════════════════════════════════════════════════════
 const STORAGE_KEY = 'S4C_TWIN_V3';
 function loadState() { try { const r = localStorage.getItem(STORAGE_KEY); return r ? JSON.parse(r) : null; } catch { return null; } }
-function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify({ people: STATE.people, tasks: STATE.tasks, events: STATE.events, checkedActions: STATE.checkedActions })); }
+function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify({ people: STATE.people, tasks: STATE.tasks, events: STATE.events, documents: STATE.documents, checkedActions: STATE.checkedActions })); }
 
 const saved = loadState();
 const STATE = {
   people: saved?.people || PEOPLE_DATA,
   tasks: saved?.tasks || DEFAULT_TASKS,
   events: saved?.events || DEFAULT_EVENTS,
+  documents: saved?.documents || DEFAULT_DOCUMENTS,
   checkedActions: saved?.checkedActions || {},
   activeTab: 'twin',
   taskFilter: 'all',
@@ -655,7 +669,8 @@ function renderNetworkNodes() {
   }
   grid.innerHTML = people.map(p => {
     const tc = STATE.tasks.filter(t => t.assignee === p.name || t.coLead === p.name).length;
-    return `<div class="net-node" data-name="${p.name}" onclick="scrollToTwin('${p.id}')">
+    const leadClass = isLead(p) ? ' is-lead' : '';
+    return `<div class="net-node${leadClass}" data-name="${p.name}" onclick="openPersonFlyout('${p.id}')">
       <div class="net-node-avatar" style="background:${hashColor(p.name)}" id="node-${p.id}">${initials(p.name)}<span class="net-node-status ${p.status}"></span></div>
       <div class="net-node-name">${p.name.split(' ')[0]}</div>
       <div class="net-node-tasks">${tc || '—'}</div>
@@ -694,13 +709,15 @@ function renderTwinGrid() {
     people = people.filter(p => p.name.toLowerCase().includes(q) || p.role.toLowerCase().includes(q) || (p.bio || '').toLowerCase().includes(q) || (p.skills || []).some(s => s.toLowerCase().includes(q)) || (p.quotes || []).some(qo => qo.text.toLowerCase().includes(q)) || (p.actionItems || []).some(a => a.text.toLowerCase().includes(q)));
   }
 
-  // Board filter buttons
-  const filterHtml = `<div class="filter-chips" style="margin-bottom:var(--space-lg)">
-    <button class="chip chip-filter ${bf === 'all' ? 'active' : ''}" onclick="setBoardFilter('all')">All (${STATE.people.length})</button>
-    <button class="chip chip-filter ${bf === 'core' ? 'active' : ''}" onclick="setBoardFilter('core')">Core Team (${STATE.people.filter(p=>p.board==='core').length})</button>
-    <button class="chip chip-filter ${bf === 'honorary' ? 'active' : ''}" onclick="setBoardFilter('honorary')">Honorary Board (${STATE.people.filter(p=>p.board==='honorary').length})</button>
-    <button class="chip chip-filter ${bf === 'advisors' ? 'active' : ''}" onclick="setBoardFilter('advisors')">Board of Advisors (${STATE.people.filter(p=>p.board==='advisors').length})</button>
-  </div>`;
+  // Compact board filter buttons — rendered into #twinFilters
+  const filtersContainer = $('#twinFilters');
+  if (filtersContainer) {
+    filtersContainer.innerHTML = `
+      <button class="twin-filter-btn ${bf === 'all' ? 'active' : ''}" onclick="setBoardFilter('all')">All <span class="filter-count">${STATE.people.length}</span></button>
+      <button class="twin-filter-btn ${bf === 'core' ? 'active' : ''}" onclick="setBoardFilter('core')">Core Team <span class="filter-count">${STATE.people.filter(p=>p.board==='core').length}</span></button>
+      <button class="twin-filter-btn ${bf === 'honorary' ? 'active' : ''}" onclick="setBoardFilter('honorary')">Honorary Board <span class="filter-count">${STATE.people.filter(p=>p.board==='honorary').length}</span></button>
+      <button class="twin-filter-btn ${bf === 'advisors' ? 'active' : ''}" onclick="setBoardFilter('advisors')">Board of Advisors <span class="filter-count">${STATE.people.filter(p=>p.board==='advisors').length}</span></button>`;
+  }
 
   const cardsHtml = people.map((p, idx) => {
     const personTasks = STATE.tasks.filter(t => t.assignee === p.name || t.coLead === p.name);
@@ -708,12 +725,15 @@ function renderTwinGrid() {
     const doneActions = (p.actionItems || []).filter((a, i) => a.status === 'done' || STATE.checkedActions[p.id + '_' + i]).length;
     const boardLabel = { core: 'chip-green', honorary: 'chip-purple', advisors: 'chip-blue' }[p.board] || 'chip-muted';
     const boardName = { core: 'Core Team', honorary: 'Honorary Board', advisors: 'Board of Advisors' }[p.board] || '';
+    const personIsLead = isLead(p);
+    const leadBadge = personIsLead ? '<span class="lead-badge">Lead</span>' : '';
+    const leadCardClass = personIsLead ? ' is-lead' : '';
 
-    return `<div class="twin-card glass" data-twin-id="${p.id}" style="animation-delay:${idx * 40}ms">
-      <div class="twin-card-header">
+    return `<div class="twin-card glass${leadCardClass}" data-twin-id="${p.id}" style="animation-delay:${idx * 40}ms">
+      <div class="twin-card-header" style="cursor:pointer" onclick="openPersonFlyout('${p.id}')">
         <div class="tc-avatar" style="background:${hashColor(p.name)}">${initials(p.name)}<span class="status-ring ${p.status}"></span></div>
         <div class="tc-info">
-          <div class="tc-name">${p.name} <span class="chip ${boardLabel}" style="font-size:0.58rem;vertical-align:middle">${boardName}</span></div>
+          <div class="tc-name">${p.name} ${leadBadge}<span class="chip ${boardLabel}" style="font-size:0.58rem;vertical-align:middle">${boardName}</span></div>
           <div class="tc-role">${p.role}</div>
           <div class="tc-meta-row">
             ${p.timezone ? `<span class="tc-meta-item">🕐 ${p.timezone}</span>` : ''}
@@ -730,7 +750,7 @@ function renderTwinGrid() {
 
       ${(p.actionItems?.length) ? `<div class="twin-section"><div class="twin-section-label"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd"/></svg>Action items</div><div class="action-list">${p.actionItems.map((a, ai) => { const k = p.id + '_' + ai; const chk = a.status === 'done' || STATE.checkedActions[k]; const st = chk ? 'done' : a.status; return `<div class="action-item ${chk ? 'done' : ''}"><div class="action-check ${chk ? 'checked' : ''}" onclick="toggleAction('${p.id}',${ai},event)"></div><div class="action-text">${a.text}${a.due ? `<span style="display:block;font-size:0.62rem;color:var(--clr-text-dim);font-family:var(--ff-mono);margin-top:2px">Due: ${shortDate(a.due)}</span>` : ''}${a.source ? `<span style="display:block;font-size:0.6rem;color:var(--clr-text-dim);font-style:italic">↳ ${a.source}</span>` : ''}</div><span class="action-status ${st}">${st.replace('-',' ')}</span></div>`; }).join('')}</div></div>` : ''}
 
-      ${(p.connections?.length) ? `<div class="twin-section"><div class="twin-section-label"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M7 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM14.5 9a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM1.615 16.428a1.224 1.224 0 0 1-.569-1.175 6.002 6.002 0 0 1 11.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 0 1 7 18a9.953 9.953 0 0 1-5.385-1.572ZM14.5 16h-.106c.07-.297.088-.611.048-.933a7.47 7.47 0 0 0-1.588-3.755 4.502 4.502 0 0 1 5.874 2.636.818.818 0 0 1-.36.98A7.465 7.465 0 0 1 14.5 16Z"/></svg>Connected with</div><div class="conn-list">${p.connections.map(c => `<div class="conn-chip" title="${c.reason}"><span class="conn-chip-avatar" style="background:${hashColor(c.to)}">${initials(c.to)}</span>${c.to.split(' ')[0]}<span class="conn-chip-reason">${c.reason.length > 28 ? c.reason.slice(0, 26) + '…' : c.reason}</span></div>`).join('')}</div></div>` : ''}
+      ${(p.connections?.length) ? `<div class="twin-section"><div class="twin-section-label"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M7 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM14.5 9a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM1.615 16.428a1.224 1.224 0 0 1-.569-1.175 6.002 6.002 0 0 1 11.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 0 1 7 18a9.953 9.953 0 0 1-5.385-1.572ZM14.5 16h-.106c.07-.297.088-.611.048-.933a7.47 7.47 0 0 0-1.588-3.755 4.502 4.502 0 0 1 5.874 2.636.818.818 0 0 1-.36.98A7.465 7.465 0 0 1 14.5 16Z"/></svg>Connected with</div><div class="conn-list">${p.connections.map(c => { const cp = STATE.people.find(x => x.name === c.to); const cpId = cp ? cp.id : ''; return `<div class="conn-chip" title="${c.reason}" ${cpId ? `onclick="openPersonFlyout('${cpId}')" style="cursor:pointer"` : ''}><span class="conn-chip-avatar" style="background:${hashColor(c.to)}">${initials(c.to)}</span>${c.to.split(' ')[0]}<span class="conn-chip-reason">${c.reason.length > 28 ? c.reason.slice(0, 26) + '…' : c.reason}</span></div>`; }).join('')}</div></div>` : ''}
 
       ${(p.personalTimeline?.length) ? `<div class="twin-section"><div class="twin-section-label"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-13a.75.75 0 0 0-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 0 0 0-1.5h-3.25V5Z" clip-rule="evenodd"/></svg>Timeline</div><div class="mini-timeline">${p.personalTimeline.slice(-4).reverse().map(t => `<div class="mini-tl-item"><div class="mini-tl-date">${shortDate(t.date)}</div><div class="mini-tl-text">${t.text}</div></div>`).join('')}</div></div>` : ''}
 
@@ -778,7 +798,7 @@ function renderTwinGrid() {
     `).join('')}
   </div>`;
 
-  $('#twinGrid').innerHTML = filterHtml + cardsHtml + meetingsHtml;
+  $('#twinGrid').innerHTML = cardsHtml + meetingsHtml;
 }
 
 function setBoardFilter(f) { STATE.boardFilter = f; renderTwinGrid(); }
@@ -925,9 +945,213 @@ function handlePlannerSubmit(e) {
 }
 
 // ════════════════════════════════════════════════════════════════
+//  PERSON PROFILE FLYOUT
+// ════════════════════════════════════════════════════════════════
+function openPersonFlyout(personId) {
+  const p = STATE.people.find(x => x.id === personId);
+  if (!p) return;
+
+  const personTasks = STATE.tasks.filter(t => t.assignee === p.name || t.coLead === p.name);
+  const personEvents = STATE.events.filter(e => e.person === p.name);
+  const boardName = { core: 'Core Team', honorary: 'Honorary Board', advisors: 'Board of Advisors' }[p.board] || '';
+  const boardLabel = { core: 'chip-green', honorary: 'chip-purple', advisors: 'chip-blue' }[p.board] || 'chip-muted';
+  const personIsLead = isLead(p);
+  const leadBadge = personIsLead ? '<span class="lead-badge">Lead</span>' : '';
+
+  let html = `
+    <div class="flyout-profile-header">
+      <div class="flyout-avatar" style="background:${hashColor(p.name)}">${initials(p.name)}<span class="status-dot ${p.status}"></span></div>
+      <div class="flyout-info">
+        <h2>${p.name} ${leadBadge}</h2>
+        <div class="flyout-role">${p.role}</div>
+        <div class="flyout-meta">
+          <span class="chip ${boardLabel}" style="font-size:0.62rem">${boardName}</span>
+          ${p.timezone ? `<span>🕐 ${p.timezone}</span>` : ''}
+          ${p.location ? `<span>📍 ${p.location}</span>` : ''}
+          <span style="text-transform:capitalize">● ${p.status}</span>
+        </div>
+      </div>
+    </div>`;
+
+  // Bio
+  if (p.bio) {
+    html += `<div class="flyout-section">
+      <div class="flyout-section-title">📋 Bio</div>
+      <div class="quote-item" style="border-left-color:var(--clr-accent-2);font-style:normal">${p.bio}</div>
+    </div>`;
+  }
+
+  // Tasks
+  html += `<div class="flyout-section">
+    <div class="flyout-section-title">📋 Tasks (${personTasks.length})</div>`;
+  if (personTasks.length) {
+    html += personTasks.map(t => {
+      const stCls = { 'todo': 'todo', 'in-progress': 'in-progress', 'done': 'done' }[t.status] || 'todo';
+      return `<div class="flyout-task-card">
+        <div class="ftc-title">${t.title}${t.coLead && t.coLead === p.name ? ' <span style="font-size:0.6rem;color:var(--clr-text-dim)">(Co-Lead)</span>' : ''}</div>
+        <span class="ftc-status action-status ${stCls}">${t.status.replace('-', ' ')}</span>
+      </div>`;
+    }).join('');
+  } else {
+    html += '<p style="font-size:0.78rem;color:var(--clr-text-dim)">No tasks assigned yet.</p>';
+  }
+  html += '</div>';
+
+  // Planner Events
+  html += `<div class="flyout-section">
+    <div class="flyout-section-title">📅 Planner Events (${personEvents.length})</div>`;
+  if (personEvents.length) {
+    html += personEvents.map(e => `<div class="flyout-event-card">
+      <div class="fec-title">${e.title}</div>
+      <div class="fec-date">${formatDate(e.date)}${e.time ? ' · ' + e.time : ''}</div>
+    </div>`).join('');
+  } else {
+    html += '<p style="font-size:0.78rem;color:var(--clr-text-dim)">No planner events.</p>';
+  }
+  html += '</div>';
+
+  // Quotes
+  if (p.quotes?.length) {
+    html += `<div class="flyout-section">
+      <div class="flyout-section-title">💬 What they said (${p.quotes.length})</div>
+      <div class="quote-list">${p.quotes.map(q => `<div class="quote-item">${q.text}<span class="quote-date">${shortDate(q.date)}${q.context ? ` · ${q.context}` : ''}</span></div>`).join('')}</div>
+    </div>`;
+  }
+
+  // Action Items
+  if (p.actionItems?.length) {
+    html += `<div class="flyout-section">
+      <div class="flyout-section-title">✅ Action Items (${p.actionItems.length})</div>
+      <div class="action-list">${p.actionItems.map((a, ai) => {
+        const k = p.id + '_' + ai;
+        const chk = a.status === 'done' || STATE.checkedActions[k];
+        const st = chk ? 'done' : a.status;
+        return `<div class="action-item ${chk ? 'done' : ''}"><div class="action-check ${chk ? 'checked' : ''}" onclick="toggleAction('${p.id}',${ai},event)"></div><div class="action-text">${a.text}${a.due ? `<span style="display:block;font-size:0.62rem;color:var(--clr-text-dim);font-family:var(--ff-mono);margin-top:2px">Due: ${shortDate(a.due)}</span>` : ''}${a.source ? `<span style="display:block;font-size:0.6rem;color:var(--clr-text-dim);font-style:italic">↳ ${a.source}</span>` : ''}</div><span class="action-status ${st}">${st.replace('-',' ')}</span></div>`;
+      }).join('')}</div>
+    </div>`;
+  }
+
+  // Connections
+  if (p.connections?.length) {
+    html += `<div class="flyout-section">
+      <div class="flyout-section-title">🔗 Connections (${p.connections.length})</div>
+      <div class="conn-list">${p.connections.map(c => {
+        const cp = STATE.people.find(x => x.name === c.to);
+        const cpId = cp ? cp.id : '';
+        return `<div class="conn-chip" title="${c.reason}" ${cpId ? `onclick="openPersonFlyout('${cpId}')" style="cursor:pointer"` : ''}><span class="conn-chip-avatar" style="background:${hashColor(c.to)}">${initials(c.to)}</span>${c.to.split(' ')[0]}<span class="conn-chip-reason">${c.reason}</span></div>`;
+      }).join('')}</div>
+    </div>`;
+  }
+
+  // Timeline
+  if (p.personalTimeline?.length) {
+    html += `<div class="flyout-section">
+      <div class="flyout-section-title">🕒 Timeline</div>
+      <div class="mini-timeline">${p.personalTimeline.slice().reverse().map(t => `<div class="mini-tl-item"><div class="mini-tl-date">${shortDate(t.date)}</div><div class="mini-tl-text">${t.text}</div></div>`).join('')}</div>
+    </div>`;
+  }
+
+  // Skills
+  if (p.skills?.length) {
+    html += `<div class="flyout-section">
+      <div class="flyout-section-title">🏷️ Skills</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">${p.skills.map(s => `<span class="chip chip-skill">${s}</span>`).join('')}</div>
+    </div>`;
+  }
+
+  // Notes
+  if (p.notes) {
+    html += `<div class="flyout-section">
+      <div class="flyout-section-title">📝 Notes</div>
+      <p style="font-size:0.78rem;color:var(--clr-text-muted);line-height:1.5">${p.notes}</p>
+    </div>`;
+  }
+
+  $('#flyoutPersonContent').innerHTML = html;
+  $('#flyoutPerson').classList.add('open');
+}
+
+// ════════════════════════════════════════════════════════════════
+//  RENDER: DOCUMENTS
+// ════════════════════════════════════════════════════════════════
+function renderDocuments() {
+  const grid = $('#docsGrid');
+  if (!grid) return;
+
+  const docs = STATE.documents || [];
+  const typeIcons = { pdf: '📕', doc: '📘', docx: '📘', ppt: '📙', pptx: '📙', xls: '📗', xlsx: '📗', txt: '📄' };
+
+  grid.innerHTML = docs.map(doc => {
+    const icon = typeIcons[doc.type] || '📄';
+    const viewUrl = doc.builtIn ? doc.filename : '#';
+    const canDelete = STATE.isAdmin && !doc.builtIn;
+
+    return `<div class="doc-card glass">
+      <div style="display:flex;gap:var(--space-md);align-items:flex-start">
+        <div class="doc-card-icon">${icon}</div>
+        <div class="doc-card-info">
+          <h4>${doc.name}</h4>
+          <div class="doc-meta">
+            <span>${doc.type.toUpperCase()}</span>
+            <span>${doc.size}</span>
+            <span>${formatDate(doc.date)}</span>
+          </div>
+        </div>
+      </div>
+      <div class="doc-card-actions">
+        ${doc.builtIn ? `<a href="${viewUrl}" target="_blank" class="btn btn-sm btn-ghost" style="text-decoration:none">👁 View</a>
+        <a href="${viewUrl}" download class="btn btn-sm btn-ghost" style="text-decoration:none">⬇ Download</a>` : `<button class="btn btn-sm btn-ghost" onclick="toast('This document was uploaded locally.','info')">👁 View</button>`}
+        ${STATE.isAdmin ? `<button class="btn btn-sm btn-danger" onclick="deleteDocument('${doc.id}')">🗑 Remove</button>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  if (docs.length === 0) {
+    grid.innerHTML = '<div class="empty-state"><p>No documents available.</p></div>';
+  }
+}
+
+function deleteDocument(docId) {
+  if (!STATE.isAdmin) { toast('Admin login required.', 'error'); return; }
+  if (!confirm('Remove this document?')) return;
+  STATE.documents = STATE.documents.filter(d => d.id !== docId);
+  saveState();
+  renderDocuments();
+  toast('Document removed.', 'info');
+}
+
+function handleDocUpload(e) {
+  e.preventDefault();
+  if (!STATE.isAdmin) { toast('Admin login required to upload.', 'error'); return; }
+  const fileInput = $('#docFile');
+  const nameInput = $('#docName');
+  if (!fileInput.files.length) return;
+  const file = fileInput.files[0];
+  const ext = file.name.split('.').pop().toLowerCase();
+  const docName = nameInput.value.trim() || file.name;
+  const sizeStr = file.size > 1048576 ? (file.size / 1048576).toFixed(1) + ' MB' : Math.round(file.size / 1024) + ' KB';
+
+  const newDoc = {
+    id: uid(),
+    name: docName,
+    filename: file.name,
+    size: sizeStr,
+    type: ext,
+    date: new Date().toISOString().slice(0, 10),
+    builtIn: false
+  };
+
+  STATE.documents.push(newDoc);
+  saveState();
+  closeModal('modalUploadDoc');
+  renderDocuments();
+  toast(`Uploaded: ${docName}`, 'success');
+}
+
+// ════════════════════════════════════════════════════════════════
 //  RENDER ALL & INIT
 // ════════════════════════════════════════════════════════════════
-function renderAll() { renderNetworkNodes(); renderTwinGrid(); renderKPIs(); renderActivityFeed(); renderPartnerships(); renderTasks(); renderPlanner(); renderTimeline(); setTimeout(drawNetwork, 150); updateAdminUI(); }
+function renderAll() { renderNetworkNodes(); renderTwinGrid(); renderKPIs(); renderActivityFeed(); renderPartnerships(); renderTasks(); renderPlanner(); renderTimeline(); renderDocuments(); setTimeout(drawNetwork, 150); updateAdminUI(); }
 
 document.addEventListener('DOMContentLoaded', () => {
   initTheme(); updateClock(); setInterval(updateClock, 30000); renderAll();
@@ -960,6 +1184,14 @@ document.addEventListener('DOMContentLoaded', () => {
     populateDropdowns(); $('#formPlanner').reset(); $('#plannerEventEditId').value = ''; openModal('modalPlanner');
   });
   $('#formPlanner').addEventListener('submit', handlePlannerSubmit);
+  // Documents
+  const uploadDocBtn = $('#btnUploadDoc');
+  if (uploadDocBtn) uploadDocBtn.addEventListener('click', () => {
+    if (!STATE.isAdmin) { toast('Admin login required to upload.', 'error'); return; }
+    $('#formUploadDoc').reset(); openModal('modalUploadDoc');
+  });
+  const formUploadDoc = $('#formUploadDoc');
+  if (formUploadDoc) formUploadDoc.addEventListener('submit', handleDocUpload);
   $('#plannerPrev').addEventListener('click', () => { STATE.plannerWeekOffset--; renderPlanner(); });
   $('#plannerNext').addEventListener('click', () => { STATE.plannerWeekOffset++; renderPlanner(); });
   $$('.chip-filter[data-filter]').forEach(c => c.addEventListener('click', () => { $$('.chip-filter[data-filter]').forEach(x => x.classList.remove('active')); c.classList.add('active'); STATE.taskFilter = c.dataset.filter; renderTasks(); }));
