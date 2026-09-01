@@ -580,11 +580,18 @@ function loadState() { try { const r = localStorage.getItem(STORAGE_KEY); return
 function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify({ people: STATE.people, tasks: STATE.tasks, events: STATE.events, documents: STATE.documents, checkedActions: STATE.checkedActions })); }
 
 const saved = loadState();
+let initialDocs = saved?.documents ? [...saved.documents] : [...DEFAULT_DOCUMENTS];
+DEFAULT_DOCUMENTS.forEach(defDoc => {
+  if (!initialDocs.some(d => d.filename === defDoc.filename)) {
+    initialDocs.push(defDoc);
+  }
+});
+
 const STATE = {
   people: saved?.people || PEOPLE_DATA,
   tasks: saved?.tasks || DEFAULT_TASKS,
   events: saved?.events || DEFAULT_EVENTS,
-  documents: saved?.documents || DEFAULT_DOCUMENTS,
+  documents: initialDocs,
   checkedActions: saved?.checkedActions || {},
   activeTab: 'twin',
   taskFilter: 'all',
@@ -637,6 +644,7 @@ function updateAdminUI() {
   $$('.admin-only').forEach(el => {
     el.style.display = STATE.isAdmin ? '' : 'none';
   });
+  renderDocuments();
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -1140,17 +1148,59 @@ function openPersonFlyout(personId) {
 // ════════════════════════════════════════════════════════════════
 //  RENDER: DOCUMENTS
 // ════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════
+//  RENDER: DOCUMENTS & PDF VIEWER
+// ════════════════════════════════════════════════════════════════
+function isAuthorizedDownloader() {
+  return STATE.isAdmin && (STATE.adminUser === 'Jim Volp' || STATE.adminUser === 'Norbert');
+}
+
+function viewPdf(filename, name, size) {
+  const frame = $('#pdfViewerFrame');
+  const title = $('#pdfViewerTitle');
+  const meta = $('#pdfViewerMeta');
+  const newTabBtn = $('#pdfViewerOpenNewTab');
+
+  if (title) title.textContent = name;
+  if (meta) meta.textContent = `${filename} · ${size || 'PDF Document'}`;
+  if (newTabBtn) newTabBtn.href = filename;
+  if (frame) frame.src = filename;
+
+  openModal('modalPdfViewer');
+}
+
+function closePdfViewer() {
+  const frame = $('#pdfViewerFrame');
+  if (frame) frame.src = '';
+  closeModal('modalPdfViewer');
+}
+
+function downloadDocument(filename, name) {
+  if (!isAuthorizedDownloader()) {
+    toast('Download restricted: Only Jim Volp & Norbert are authorized to download documents. All other members are view-only.', 'warning');
+    openModal('modalLogin');
+    return;
+  }
+  const a = document.createElement('a');
+  a.href = filename;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  toast(`Downloading ${name}...`, 'success');
+}
+
 function renderDocuments() {
   const grid = $('#docsGrid');
   if (!grid) return;
 
   const docs = STATE.documents || [];
   const typeIcons = { pdf: '📕', doc: '📘', docx: '📘', ppt: '📙', pptx: '📙', xls: '📗', xlsx: '📗', txt: '📄' };
+  const canDownload = isAuthorizedDownloader();
 
   grid.innerHTML = docs.map(doc => {
     const icon = typeIcons[doc.type] || '📄';
-    const viewUrl = doc.builtIn ? doc.filename : '#';
-    const canDelete = STATE.isAdmin && !doc.builtIn;
+    const escapedName = (doc.name || '').replace(/'/g, "\\'");
 
     return `<div class="doc-card glass">
       <div style="display:flex;gap:var(--space-md);align-items:flex-start">
@@ -1165,19 +1215,19 @@ function renderDocuments() {
         </div>
       </div>
       <div class="doc-card-actions">
-        ${doc.builtIn ? `
-          <a href="${viewUrl}" target="_blank" class="btn btn-sm btn-ghost" style="text-decoration:none">
-            <svg viewBox="0 0 20 20" fill="currentColor" width="13" height="13"><path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/><path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 0 1 0-1.186A10.004 10.004 0 0 1 10 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0 1 10 17c-4.257 0-7.893-2.66-9.336-6.41ZM14 10a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" clip-rule="evenodd"/></svg>
-            View
-          </a>
-          <a href="${viewUrl}" download class="btn btn-sm btn-primary" style="text-decoration:none">
+        <button class="btn btn-sm btn-ghost" onclick="viewPdf('${doc.filename}', '${escapedName}', '${doc.size}')">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="13" height="13"><path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/><path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 0 1 0-1.186A10.004 10.004 0 0 1 10 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0 1 10 17c-4.257 0-7.893-2.66-9.336-6.41ZM14 10a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" clip-rule="evenodd"/></svg>
+          View
+        </button>
+
+        ${canDownload ? `
+          <button class="btn btn-sm btn-primary" onclick="downloadDocument('${doc.filename}', '${escapedName}')">
             <svg viewBox="0 0 20 20" fill="currentColor" width="13" height="13"><path d="M10.75 2.75a.75.75 0 0 0-1.5 0v8.614L6.295 8.235a.75.75 0 1 0-1.09 1.03l4.25 4.5a.75.75 0 0 0 1.09 0l4.25-4.5a.75.75 0 0 0-1.09-1.03l-2.955 3.129V2.75Z"/><path d="M3.5 12.75a.75.75 0 0 0-1.5 0v2.5A2.75 2.75 0 0 0 4.75 18h10.5A2.75 2.75 0 0 0 18 15.25v-2.5a.75.75 0 0 0-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5Z"/></svg>
             Download
-          </a>` : `
-          <button class="btn btn-sm btn-ghost" onclick="toast('This document was uploaded locally.','info')">
-            <svg viewBox="0 0 20 20" fill="currentColor" width="13" height="13"><path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/><path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 0 1 0-1.186A10.004 10.004 0 0 1 10 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0 1 10 17c-4.257 0-7.893-2.66-9.336-6.41ZM14 10a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" clip-rule="evenodd"/></svg>
-            View
-          </button>`}
+          </button>` : `
+          <span class="view-only-tag" title="Download access is restricted to Jim Volp & Norbert.">🔒 View Only</span>
+        `}
+
         ${STATE.isAdmin ? `
           <button class="btn btn-sm btn-danger" onclick="deleteDocument('${doc.id}')">
             <svg viewBox="0 0 20 20" fill="currentColor" width="13" height="13"><path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z" clip-rule="evenodd"/></svg>

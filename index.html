@@ -232,7 +232,10 @@
       <div class="docs-header">
         <div>
           <h2>📄 Space4Climate Documents</h2>
-          <p style="font-size:0.82rem; color:var(--clr-text-muted); margin-top:4px;">Official documents, meeting minutes, and reference materials</p>
+          <p style="font-size:0.84rem; font-weight:600; color:var(--clr-text-muted); margin-top:4px;">
+            Official documents, meeting minutes, and governance archives.
+            <span class="doc-access-notice">🔒 View-only for members · Downloads restricted to Jim Volp &amp; Norbert</span>
+          </p>
         </div>
         <button class="btn btn-primary admin-only" id="btnUploadDoc" style="display:none;">
           <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path d="M9.25 13.25a.75.75 0 0 0 1.5 0V4.636l2.955 3.129a.75.75 0 0 0 1.09-1.03l-4.25-4.5a.75.75 0 0 0-1.09 0l-4.25 4.5a.75.75 0 1 0 1.09 1.03L9.25 4.636v8.614Z"/><path d="M3.5 12.75a.75.75 0 0 0-1.5 0v2.5A2.75 2.75 0 0 0 4.75 18h10.5A2.75 2.75 0 0 0 18 15.25v-2.5a.75.75 0 0 0-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5Z"/></svg>
@@ -496,6 +499,31 @@
           <button type="submit" class="btn btn-primary">Upload</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- ── MODAL: In-Browser PDF Viewer ── -->
+  <div class="modal-overlay" id="modalPdfViewer">
+    <div class="modal" style="max-width: 1040px; width: 95vw; height: 90vh; display: flex; flex-direction: column; padding: var(--space-lg); border-radius: var(--radius-xl);">
+      <div class="modal-header" style="margin-bottom: var(--space-md); padding-bottom: var(--space-sm); border-bottom: 2px solid var(--clr-border);">
+        <div style="display: flex; align-items: center; gap: 12px; min-width: 0;">
+          <span style="font-size: 1.6rem; flex-shrink: 0;">📄</span>
+          <div style="min-width: 0;">
+            <h3 id="pdfViewerTitle" style="font-size: 1.15rem; font-weight: 800; margin: 0; color: var(--clr-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Document Viewer</h3>
+            <div id="pdfViewerMeta" style="font-size: 0.72rem; font-weight: 700; color: var(--clr-text-dim); margin-top: 2px;"></div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+          <a id="pdfViewerOpenNewTab" href="#" target="_blank" class="btn btn-sm btn-ghost" style="text-decoration: none;" title="Open document directly in a new browser tab">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 0 0-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 0 0 .75-.75v-4a.75.75 0 0 1 1.5 0v4A2.25 2.25 0 0 1 12.75 17h-8.5A2.25 2.25 0 0 1 2 14.75v-8.5A2.25 2.25 0 0 1 4.25 4h4a.75.75 0 0 1 0 1.5h-4Z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M6.194 12.753a.75.75 0 0 0 1.06 1.06l7.247-7.246V9a.75.75 0 0 0 1.5 0V4.25a.75.75 0 0 0-.75-.75H10.5a.75.75 0 0 0 0 1.5h2.434l-6.74 6.753Z" clip-rule="evenodd"/></svg>
+            Open in Tab
+          </a>
+          <button class="btn btn-ghost btn-icon modal-close" onclick="closePdfViewer()">&times;</button>
+        </div>
+      </div>
+      <div style="flex: 1; width: 100%; height: 100%; border-radius: var(--radius-md); overflow: hidden; background: #2f3542; position: relative;">
+        <iframe id="pdfViewerFrame" src="" style="width: 100%; height: 100%; border: none; display: block;" title="PDF Viewer Frame"></iframe>
+      </div>
     </div>
   </div>
 

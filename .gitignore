@@ -7,8 +7,7 @@ __pycache__/
 extracted_text.txt
 extract_pdfs.py
 
-# PDFs (too large for git)
-*.pdf
+# PDFs are tracked for Space4Climate document vault
 
 # OS
 .DS_Store
