@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 260" width="100%" height="100%" aria-label="Space4Climate Logo">
+  <defs>
+    <!-- Clip globe to circular area -->
+    <clipPath id="s4cGlobeClip">
+      <circle cx="130" cy="138" r="74" />
+    </clipPath>
+
+    <!-- Path for curved text along bottom edge -->
+    <path id="spaceTextCurve" d="M 36,128 A 96,96 0 0,0 224,128" fill="none" />
+
+    <!-- Subtle drop shadow for satellite -->
+    <filter id="satGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <style>
+    .s4c-orbit { stroke: #8da0b3; stroke-width: 1.8; stroke-dasharray: 4, 4.5; fill: none; opacity: 0.85; }
+    .s4c-text { 
+      font-family: 'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif; 
+      font-size: 15.5px; 
+      font-weight: 800; 
+      letter-spacing: 2.2px; 
+      fill: #153d68; 
+    }
+    :root[data-theme="dark"] .s4c-text,
+    [data-theme="dark"] .s4c-text { fill: #f8fafc; }
+    [data-theme="light"] .s4c-text { fill: #153d68; }
+    .s4c-num4 {
+      font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+      font-weight: 900;
+      fill: none;
+      stroke: #153d68;
+      stroke-width: 1.8;
+    }
+    :root[data-theme="dark"] .s4c-num4,
+    [data-theme="dark"] .s4c-num4 { stroke: #38bdf8; }
+    [data-theme="light"] .s4c-num4 { stroke: #0284c7; }
+  </style>
+
+  <!-- ── 1. Dashed Orbital Ring ── -->
+  <circle cx="130" cy="138" r="92" class="s4c-orbit" />
+
+  <!-- ── 2. Satellite Radio Broadcast Arcs ── -->
+  <g opacity="0.85">
+    <path d="M 125 52 A 6 6 0 0 0 135 52" stroke="#8fa8c0" stroke-width="1.5" stroke-linecap="round" fill="none" />
+    <path d="M 120 57 A 12 12 0 0 0 140 57" stroke="#8fa8c0" stroke-width="1.5" stroke-linecap="round" fill="none" />
+    <path d="M 115 62 A 18 18 0 0 0 145 62" stroke="#8fa8c0" stroke-width="1.5" stroke-linecap="round" fill="none" />
+  </g>
+
+  <!-- ── 3. Central Globe with Weather & Climate Quadrants ── -->
+  <g clip-path="url(#s4cGlobeClip)">
+    <!-- Top-Left Quadrant: Stormy Overcast Grey -->
+    <rect x="56" y="64" width="74" height="74" fill="#b5bac0" />
+
+    <!-- Top-Right Quadrant: Golden Sunny Atmosphere -->
+    <rect x="130" y="64" width="74" height="74" fill="#f9c952" />
+
+    <!-- Bottom Half: Azure Ocean -->
+    <rect x="56" y="138" width="148" height="74" fill="#72cdf4" />
+
+    <!-- ── Storm Raincloud in Top-Left ── -->
+    <g>
+      <!-- Cloud puff body -->
+      <path d="M 72,104 C 68,104 65,100.5 65,96.5 C 65,92.5 68,89.5 72,89 C 73.5,83 79,78.5 85.5,78.5 C 91,78.5 95.5,81.5 97.5,86 C 99,85 101,84.5 103.5,84.5 C 109,84.5 113.5,88.8 113.5,94 C 116.5,95 119,98 119,101.5 C 119,105.5 115.5,108.5 111.5,108.5 L 75,108.5 C 73,108.5 72,106.5 72,104 Z" fill="#858a91" />
+      <!-- 3 Raindrops -->
+      <path d="M 78,114 C 78,114 75,118.5 75,121 C 75,122.6 76.3,124 78,124 C 79.7,124 81,122.6 81,121 C 81,118.5 78,114 78,114 Z" fill="#ffffff" />
+      <path d="M 91,118 C 91,118 88,122.5 88,125 C 88,126.6 89.3,128 91,128 C 92.7,128 94,126.6 94,125 C 94,122.5 91,118 91,118 Z" fill="#ffffff" />
+      <path d="M 104,114 C 104,114 101,118.5 101,121 C 101,122.6 102.3,124 104,124 C 105.7,124 107,122.6 107,121 C 107,118.5 104,114 104,114 Z" fill="#ffffff" />
+    </g>
+
+    <!-- ── Radiant Sun in Top-Right ── -->
+    <g>
+      <!-- 8-pointed solar corona flare -->
+      <path d="M 166,78 L 172,86 L 183,84 L 182,95 L 189,101 L 182,107 L 183,118 L 172,116 L 166,124 L 160,116 L 149,118 L 150,107 L 143,101 L 150,95 L 149,84 L 160,86 Z" fill="#ffe380" />
+      <!-- Warm Sun Core -->
+      <circle cx="166" cy="101" r="13.5" fill="#f39c28" />
+    </g>
+
+    <!-- ── Continents in Green (Bottom Half) ── -->
+    <!-- Americas (Left & Central) -->
+    <path d="M 70,138 C 73,142 78,145 82,151 C 86,157 83,164 81,171 C 79,178 84,187 86,194 C 88,199 85,204 83,211 C 78,206 74,197 71,188 C 68,179 64,169 62,159 C 60,148 65,141 70,138 Z" fill="#36a461" />
+    <path d="M 81,152 C 89,150 100,156 105,164 C 109,172 106,181 100,190 C 96,196 94,206 91,212 C 87,204 85,193 86,183 C 87,175 80,166 78,158 Z" fill="#36a461" />
+    <!-- Africa & Europe (Right) -->
+    <path d="M 170,138 C 173,144 177,150 180,157 C 183,164 186,171 190,178 C 195,188 199,194 204,198 C 200,205 194,210 187,212 C 182,203 180,193 177,184 C 174,173 171,161 170,151 C 168,144 169,140 170,138 Z" fill="#36a461" />
+  </g>
+
+  <!-- Globe Border Outline -->
+  <circle cx="130" cy="138" r="74" fill="none" stroke="rgba(21,61,104,0.15)" stroke-width="1.8" />
+
+  <!-- ── 4. Orbiting Satellite at Top (12 O'clock) ── -->
+  <g filter="url(#satGlow)">
+    <!-- Mount Bars -->
+    <line x1="122" y1="33.5" x2="124" y2="33.5" stroke="#607080" stroke-width="1.6" />
+    <line x1="136" y1="33.5" x2="138" y2="33.5" stroke="#607080" stroke-width="1.6" />
+
+    <!-- Left Solar Panel -->
+    <rect x="104" y="27" width="18" height="13" rx="1.8" fill="#ffffff" stroke="#a4bccc" stroke-width="1.2" />
+    <line x1="113" y1="27" x2="113" y2="40" stroke="#a4bccc" stroke-width="1" />
+    <line x1="104" y1="33.5" x2="122" y2="33.5" stroke="#a4bccc" stroke-width="1" />
+
+    <!-- Right Solar Panel -->
+    <rect x="138" y="27" width="18" height="13" rx="1.8" fill="#ffffff" stroke="#a4bccc" stroke-width="1.2" />
+    <line x1="147" y1="27" x2="147" y2="40" stroke="#a4bccc" stroke-width="1" />
+    <line x1="138" y1="33.5" x2="156" y2="33.5" stroke="#a4bccc" stroke-width="1" />
+
+    <!-- Satellite Body -->
+    <rect x="124" y="24" width="12" height="20" rx="4" fill="#153d8a" />
+    <path d="M 124 25 A 6 6 0 0 1 136 25 Z" fill="#2050aa" />
+    <rect x="123" y="32" width="14" height="2.5" fill="#38bdf8" />
+    <!-- Dish Base -->
+    <path d="M 122 44 C 122 49 138 49 138 44 Z" fill="#153d8a" />
+    <line x1="130" y1="46" x2="130" y2="50" stroke="#153d8a" stroke-width="1.5" />
+    <circle cx="130" cy="50" r="1.5" fill="#38bdf8" />
+  </g>
+
+  <!-- ── 5. Curved Branding Text: SPACE · 4 · CLIMATE ── -->
+  <text class="s4c-text">
+    <textPath href="#spaceTextCurve" startOffset="50%" text-anchor="middle">
+      SPACE · <tspan class="s4c-num4">4</tspan> · CLIMATE
+    </textPath>
+  </text>
+</svg>
