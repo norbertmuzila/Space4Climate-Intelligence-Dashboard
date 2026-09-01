@@ -684,7 +684,8 @@ function drawNetwork() {
   canvas.width = rect.width; canvas.height = rect.height;
   const ctx = canvas.getContext('2d'); ctx.clearRect(0, 0, canvas.width, canvas.height);
   const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
-  ctx.strokeStyle = isDark ? 'rgba(88,166,255,0.07)' : 'rgba(9,105,218,0.05)'; ctx.lineWidth = 1.5;
+  
+  ctx.lineWidth = 2.2;
   const nodeMap = {};
   $$('.net-node-avatar').forEach(n => {
     const r = n.getBoundingClientRect(); const name = n.closest('.net-node')?.dataset.name;
@@ -692,7 +693,22 @@ function drawNetwork() {
   });
   STATE.people.forEach(p => {
     if (!p.connections) return; const from = nodeMap[p.name]; if (!from) return;
-    p.connections.forEach(c => { const to = nodeMap[c.to]; if (!to) return; ctx.beginPath(); ctx.moveTo(from.x, from.y); ctx.quadraticCurveTo((from.x + to.x) / 2, (from.y + to.y) / 2 - 18, to.x, to.y); ctx.stroke(); });
+    p.connections.forEach(c => {
+      const to = nodeMap[c.to]; if (!to) return;
+      const grad = ctx.createLinearGradient(from.x, from.y, to.x, to.y);
+      if (isDark) {
+        grad.addColorStop(0, 'rgba(56, 189, 248, 0.45)');
+        grad.addColorStop(1, 'rgba(192, 132, 252, 0.45)');
+      } else {
+        grad.addColorStop(0, 'rgba(2, 132, 199, 0.40)');
+        grad.addColorStop(1, 'rgba(124, 58, 237, 0.40)');
+      }
+      ctx.strokeStyle = grad;
+      ctx.beginPath();
+      ctx.moveTo(from.x, from.y);
+      ctx.quadraticCurveTo((from.x + to.x) / 2, (from.y + to.y) / 2 - 20, to.x, to.y);
+      ctx.stroke();
+    });
   });
 }
 function scrollToTwin(id) { const el = document.querySelector(`[data-twin-id="${id}"]`); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
@@ -709,14 +725,26 @@ function renderTwinGrid() {
     people = people.filter(p => p.name.toLowerCase().includes(q) || p.role.toLowerCase().includes(q) || (p.bio || '').toLowerCase().includes(q) || (p.skills || []).some(s => s.toLowerCase().includes(q)) || (p.quotes || []).some(qo => qo.text.toLowerCase().includes(q)) || (p.actionItems || []).some(a => a.text.toLowerCase().includes(q)));
   }
 
-  // Compact board filter buttons — rendered into #twinFilters
+  // Compact board filter buttons — rendered into #twinFilters with icons
   const filtersContainer = $('#twinFilters');
   if (filtersContainer) {
     filtersContainer.innerHTML = `
-      <button class="twin-filter-btn ${bf === 'all' ? 'active' : ''}" onclick="setBoardFilter('all')">All <span class="filter-count">${STATE.people.length}</span></button>
-      <button class="twin-filter-btn ${bf === 'core' ? 'active' : ''}" onclick="setBoardFilter('core')">Core Team <span class="filter-count">${STATE.people.filter(p=>p.board==='core').length}</span></button>
-      <button class="twin-filter-btn ${bf === 'honorary' ? 'active' : ''}" onclick="setBoardFilter('honorary')">Honorary Board <span class="filter-count">${STATE.people.filter(p=>p.board==='honorary').length}</span></button>
-      <button class="twin-filter-btn ${bf === 'advisors' ? 'active' : ''}" onclick="setBoardFilter('advisors')">Board of Advisors <span class="filter-count">${STATE.people.filter(p=>p.board==='advisors').length}</span></button>`;
+      <button class="twin-filter-btn ${bf === 'all' ? 'active' : ''}" onclick="setBoardFilter('all')">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-7 9a7 7 0 1 1 14 0H3Z"/></svg>
+        All <span class="filter-count">${STATE.people.length}</span>
+      </button>
+      <button class="twin-filter-btn ${bf === 'core' ? 'active' : ''}" onclick="setBoardFilter('core')">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.068 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.83-4.401Z" clip-rule="evenodd"/></svg>
+        Core Team <span class="filter-count">${STATE.people.filter(p=>p.board==='core').length}</span>
+      </button>
+      <button class="twin-filter-btn ${bf === 'honorary' ? 'active' : ''}" onclick="setBoardFilter('honorary')">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 1a4.5 4.5 0 0 0-4.5 4.5V9H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-.5V5.5A4.5 4.5 0 0 0 10 1Zm3 8V5.5a3 3 0 1 0-6 0V9h6Z" clip-rule="evenodd"/></svg>
+        Honorary Board <span class="filter-count">${STATE.people.filter(p=>p.board==='honorary').length}</span>
+      </button>
+      <button class="twin-filter-btn ${bf === 'advisors' ? 'active' : ''}" onclick="setBoardFilter('advisors')">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.253a.25.25 0 0 1 .244.304l-.459 2.066A1.75 1.75 0 0 0 10.747 15H11a.75.75 0 0 0 0-1.5h-.253a.25.25 0 0 1-.244-.304l.459-2.066A1.75 1.75 0 0 0 9.253 9H9Z" clip-rule="evenodd"/></svg>
+        Board of Advisors <span class="filter-count">${STATE.people.filter(p=>p.board==='advisors').length}</span>
+      </button>`;
   }
 
   const cardsHtml = people.map((p, idx) => {
@@ -726,20 +754,20 @@ function renderTwinGrid() {
     const boardLabel = { core: 'chip-green', honorary: 'chip-purple', advisors: 'chip-blue' }[p.board] || 'chip-muted';
     const boardName = { core: 'Core Team', honorary: 'Honorary Board', advisors: 'Board of Advisors' }[p.board] || '';
     const personIsLead = isLead(p);
-    const leadBadge = personIsLead ? '<span class="lead-badge">Lead</span>' : '';
+    const leadBadge = personIsLead ? '<span class="lead-badge">★ Lead</span>' : '';
     const leadCardClass = personIsLead ? ' is-lead' : '';
 
     return `<div class="twin-card glass${leadCardClass}" data-twin-id="${p.id}" style="animation-delay:${idx * 40}ms">
       <div class="twin-card-header" style="cursor:pointer" onclick="openPersonFlyout('${p.id}')">
         <div class="tc-avatar" style="background:${hashColor(p.name)}">${initials(p.name)}<span class="status-ring ${p.status}"></span></div>
         <div class="tc-info">
-          <div class="tc-name">${p.name} ${leadBadge}<span class="chip ${boardLabel}" style="font-size:0.58rem;vertical-align:middle">${boardName}</span></div>
-          <div class="tc-role">${p.role}</div>
+          <div class="tc-name">${p.name} ${leadBadge}<span class="chip ${boardLabel}" style="font-size:0.62rem;font-weight:800;vertical-align:middle">${boardName}</span></div>
+          <div class="tc-role"><strong>${p.role}</strong></div>
           <div class="tc-meta-row">
-            ${p.timezone ? `<span class="tc-meta-item">🕐 ${p.timezone}</span>` : ''}
-            ${p.location ? `<span class="tc-meta-item">📍 ${p.location}</span>` : ''}
-            ${personTasks.length ? `<span class="tc-meta-item">📋 ${personTasks.length} tasks</span>` : ''}
-            ${totalActions ? `<span class="tc-meta-item">✅ ${doneActions}/${totalActions}</span>` : ''}
+            ${p.timezone ? `<span class="tc-meta-item">🕐 <strong>${p.timezone}</strong></span>` : ''}
+            ${p.location ? `<span class="tc-meta-item">📍 <strong>${p.location}</strong></span>` : ''}
+            ${personTasks.length ? `<span class="tc-meta-item">📋 <strong>${personTasks.length} tasks</strong></span>` : ''}
+            ${totalActions ? `<span class="tc-meta-item">✅ <strong>${doneActions}/${totalActions}</strong></span>` : ''}
           </div>
         </div>
       </div>
@@ -815,21 +843,59 @@ function renderKPIs() {
   const ta = STATE.people.reduce((s, p) => s + (p.actionItems || []).length, 0);
   const da = STATE.people.reduce((s, p) => s + (p.actionItems || []).filter((a, i) => a.status === 'done' || STATE.checkedActions[p.id + '_' + i]).length, 0);
   $('#kpiGrid').innerHTML = `
-    <div class="kpi-card glass"><div class="kpi-label">Team + Boards</div><div class="kpi-value">${tp}</div><div class="kpi-sub">${ap} active</div></div>
-    <div class="kpi-card glass"><div class="kpi-label">Total Tasks</div><div class="kpi-value">${tt}</div><div class="kpi-sub">${ip} in progress</div></div>
-    <div class="kpi-card glass"><div class="kpi-label">Tasks Done</div><div class="kpi-value">${dt}</div><div class="kpi-sub">${tt ? Math.round(dt / tt * 100) : 0}%</div></div>
-    <div class="kpi-card glass"><div class="kpi-label">Overdue</div><div class="kpi-value">${od}</div><div class="kpi-sub">${od ? '⚠ Attention' : '✓ On track'}</div></div>
-    <div class="kpi-card glass"><div class="kpi-label">Action Items</div><div class="kpi-value">${da}/${ta}</div><div class="kpi-sub">${ta ? Math.round(da / ta * 100) : 0}% done</div></div>
-    <div class="kpi-card glass"><div class="kpi-label">Partnerships</div><div class="kpi-value">${PARTNERSHIPS.length}</div><div class="kpi-sub">Active & potential</div></div>`;
+    <div class="kpi-card glass">
+      <div class="kpi-label">👥 Team + Boards</div>
+      <div class="kpi-value">${tp}</div>
+      <div class="kpi-sub"><strong>${ap} active</strong> members</div>
+    </div>
+    <div class="kpi-card glass">
+      <div class="kpi-label">📋 Total Tasks</div>
+      <div class="kpi-value">${tt}</div>
+      <div class="kpi-sub"><strong>${ip} in progress</strong></div>
+    </div>
+    <div class="kpi-card glass">
+      <div class="kpi-label">🎯 Tasks Done</div>
+      <div class="kpi-value">${dt}</div>
+      <div class="kpi-sub"><strong>${tt ? Math.round(dt / tt * 100) : 0}%</strong> completed</div>
+    </div>
+    <div class="kpi-card glass">
+      <div class="kpi-label">⚠️ Overdue Alerts</div>
+      <div class="kpi-value" style="${od ? 'color:var(--clr-danger)' : ''}">${od}</div>
+      <div class="kpi-sub" style="${od ? 'color:var(--clr-danger)' : ''}"><strong>${od ? '⚠ Requires Attention' : '✓ All On Track'}</strong></div>
+    </div>
+    <div class="kpi-card glass">
+      <div class="kpi-label">⚡ Action Items</div>
+      <div class="kpi-value">${da}/${ta}</div>
+      <div class="kpi-sub"><strong>${ta ? Math.round(da / ta * 100) : 0}%</strong> resolved</div>
+    </div>
+    <div class="kpi-card glass">
+      <div class="kpi-label">🌐 Partnerships</div>
+      <div class="kpi-value">${PARTNERSHIPS.length}</div>
+      <div class="kpi-sub"><strong>Global</strong> Agencies</div>
+    </div>`;
 }
 
 function renderActivityFeed() {
   const sorted = [...ACTIVITY_FEED].sort((a, b) => new Date(b.time) - new Date(a.time));
-  $('#activityFeed').innerHTML = sorted.map((item, i) => `<li style="animation-delay:${i * 50}ms"><div class="af-avatar" style="background:${hashColor(item.person)}">${initials(item.person)}</div><div class="af-body"><div class="af-name">${item.person}</div><div class="af-text">${item.text}</div><div class="af-time">${relativeTime(item.time)}</div></div></li>`).join('');
+  $('#activityFeed').innerHTML = sorted.map((item, i) => `<li style="animation-delay:${i * 50}ms">
+    <div class="af-avatar" style="background:${hashColor(item.person)}">${initials(item.person)}</div>
+    <div class="af-body">
+      <div class="af-name"><strong>${item.person}</strong></div>
+      <div class="af-text">${item.text}</div>
+      <div class="af-time">🕒 ${relativeTime(item.time)}</div>
+    </div>
+  </li>`).join('');
 }
 
 function renderPartnerships() {
-  $('#partnershipList').innerHTML = PARTNERSHIPS.map(p => `<div class="partner-card"><div class="partner-icon" style="background:${p.color}18;color:${p.color}">${p.name[0]}</div><div class="partner-info"><h4>${p.name} <span class="chip ${p.status === 'Active' ? 'chip-green' : p.status === 'Context' ? 'chip-muted' : 'chip-orange'}" style="font-size:0.58rem">${p.status}</span></h4><p>${p.desc}</p></div></div>`).join('');
+  $('#partnershipList').innerHTML = PARTNERSHIPS.map(p => `
+    <div class="partner-card">
+      <div class="partner-icon" style="background:${p.color}18;color:${p.color}"><strong>${p.name[0]}</strong></div>
+      <div class="partner-info">
+        <h4><strong>${p.name}</strong> <span class="chip ${p.status === 'Active' ? 'chip-green' : p.status === 'Context' ? 'chip-muted' : 'chip-orange'}" style="font-size:0.62rem;font-weight:800">${p.status}</span></h4>
+        <p>${p.desc}</p>
+      </div>
+    </div>`).join('');
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -1090,18 +1156,33 @@ function renderDocuments() {
       <div style="display:flex;gap:var(--space-md);align-items:flex-start">
         <div class="doc-card-icon">${icon}</div>
         <div class="doc-card-info">
-          <h4>${doc.name}</h4>
+          <h4><strong>${doc.name}</strong></h4>
           <div class="doc-meta">
-            <span>${doc.type.toUpperCase()}</span>
-            <span>${doc.size}</span>
-            <span>${formatDate(doc.date)}</span>
+            <span class="chip chip-blue" style="font-size:0.62rem;font-weight:800;padding:2px 8px">${doc.type.toUpperCase()}</span>
+            <span><strong>${doc.size}</strong></span>
+            <span>📅 <strong>${formatDate(doc.date)}</strong></span>
           </div>
         </div>
       </div>
       <div class="doc-card-actions">
-        ${doc.builtIn ? `<a href="${viewUrl}" target="_blank" class="btn btn-sm btn-ghost" style="text-decoration:none">👁 View</a>
-        <a href="${viewUrl}" download class="btn btn-sm btn-ghost" style="text-decoration:none">⬇ Download</a>` : `<button class="btn btn-sm btn-ghost" onclick="toast('This document was uploaded locally.','info')">👁 View</button>`}
-        ${STATE.isAdmin ? `<button class="btn btn-sm btn-danger" onclick="deleteDocument('${doc.id}')">🗑 Remove</button>` : ''}
+        ${doc.builtIn ? `
+          <a href="${viewUrl}" target="_blank" class="btn btn-sm btn-ghost" style="text-decoration:none">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="13" height="13"><path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/><path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 0 1 0-1.186A10.004 10.004 0 0 1 10 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0 1 10 17c-4.257 0-7.893-2.66-9.336-6.41ZM14 10a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" clip-rule="evenodd"/></svg>
+            View
+          </a>
+          <a href="${viewUrl}" download class="btn btn-sm btn-primary" style="text-decoration:none">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="13" height="13"><path d="M10.75 2.75a.75.75 0 0 0-1.5 0v8.614L6.295 8.235a.75.75 0 1 0-1.09 1.03l4.25 4.5a.75.75 0 0 0 1.09 0l4.25-4.5a.75.75 0 0 0-1.09-1.03l-2.955 3.129V2.75Z"/><path d="M3.5 12.75a.75.75 0 0 0-1.5 0v2.5A2.75 2.75 0 0 0 4.75 18h10.5A2.75 2.75 0 0 0 18 15.25v-2.5a.75.75 0 0 0-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5Z"/></svg>
+            Download
+          </a>` : `
+          <button class="btn btn-sm btn-ghost" onclick="toast('This document was uploaded locally.','info')">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="13" height="13"><path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/><path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 0 1 0-1.186A10.004 10.004 0 0 1 10 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0 1 10 17c-4.257 0-7.893-2.66-9.336-6.41ZM14 10a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" clip-rule="evenodd"/></svg>
+            View
+          </button>`}
+        ${STATE.isAdmin ? `
+          <button class="btn btn-sm btn-danger" onclick="deleteDocument('${doc.id}')">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="13" height="13"><path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z" clip-rule="evenodd"/></svg>
+            Remove
+          </button>` : ''}
       </div>
     </div>`;
   }).join('');

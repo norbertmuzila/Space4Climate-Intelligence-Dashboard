@@ -23,9 +23,19 @@
   <!-- ── Header ── -->
   <header id="app-header">
     <div class="header-left">
+      <div class="brand-logo-container">
+        <img src="logo.png" alt="Space4Climate Logo" class="brand-logo" />
+        <span class="live-dot-pulse" title="System Live"></span>
+      </div>
       <div>
-        <h1>Intelligence Dashboard</h1>
-        <p class="subtitle">Living Team Replica &amp; Command Center</p>
+        <div class="header-title-row">
+          <h1>Space4Climate</h1>
+          <span class="system-status-chip">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="12" height="12"><path d="M10 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16Zm3.25 8.75a.75.75 0 0 1-1.5 0v-4.5a.75.75 0 0 1 1.5 0v4.5Zm-3.25 2.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/></svg>
+            INTELLIGENCE HUB
+          </span>
+        </div>
+        <p class="subtitle">Living Team Replica &amp; Operations Command Center</p>
       </div>
     </div>
     <div class="header-right">
@@ -34,9 +44,9 @@
       </div>
       <div class="search-box" id="searchBox">
         <svg class="search-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8ZM2 8a6 6 0 1 1 10.89 3.476l4.817 4.817a1 1 0 0 1-1.414 1.414l-4.816-4.816A6 6 0 0 1 2 8Z" clip-rule="evenodd"/></svg>
-        <input type="text" id="globalSearch" placeholder="Search people, tasks, quotes…" autocomplete="off" />
+        <input type="text" id="globalSearch" placeholder="Search people, tasks, quotes, docs…" autocomplete="off" />
       </div>
-      <button class="btn-icon" id="btnThemeToggle" title="Toggle theme">
+      <button class="btn-icon" id="btnThemeToggle" title="Toggle theme (Dark / Light)">
         <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
         <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79Z"/></svg>
       </button>
@@ -48,32 +58,81 @@
   <nav id="tab-bar" aria-label="Main navigation">
     <button class="tab active" data-tab="twin">
       <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM6 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM1.49 15.326a.78.78 0 0 1-.358-.442 3 3 0 0 1 4.308-3.516 6.484 6.484 0 0 0-1.905 3.959c-.023.222-.014.442.025.654a4.97 4.97 0 0 1-2.07-.655ZM16.44 15.98a4.97 4.97 0 0 0 2.07-.654.78.78 0 0 0 .357-.442 3 3 0 0 0-4.308-3.517 6.484 6.484 0 0 1 1.907 3.96 2.32 2.32 0 0 1-.026.654ZM18 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM5.304 16.19a.844.844 0 0 1-.277-.71 5 5 0 0 1 9.947 0 .843.843 0 0 1-.277.71A6.975 6.975 0 0 1 10 18a6.974 6.974 0 0 1-4.696-1.81Z"/></svg>
-      Team
+      <span>Team Intelligence</span>
     </button>
     <button class="tab" data-tab="overview">
       <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 0 0-1.414 0l-7 7a1 1 0 0 0 1.414 1.414L4 10.414V17a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-6.586l.293.293a1 1 0 0 0 1.414-1.414l-7-7Z"/></svg>
-      Overview
+      <span>Overview &amp; Metrics</span>
     </button>
     <button class="tab" data-tab="tasks">
       <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 4.75A.75.75 0 0 1 6.75 4h10.5a.75.75 0 0 1 0 1.5H6.75A.75.75 0 0 1 6 4.75ZM6 10a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H6.75A.75.75 0 0 1 6 10Zm0 5.25a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H6.75a.75.75 0 0 1-.75-.75ZM1.99 4.75a1 1 0 0 1 1-1h.01a1 1 0 0 1 0 2h-.01a1 1 0 0 1-1-1Zm0 5.25a1 1 0 0 1 1-1h.01a1 1 0 0 1 0 2h-.01a1 1 0 0 1-1-1Zm1 4.25a1 1 0 0 0 0 2h.01a1 1 0 0 0 0-2h-.01Z" clip-rule="evenodd"/></svg>
-      Tasks
+      <span>Deliverables &amp; Tasks</span>
     </button>
     <button class="tab" data-tab="planner">
       <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.75 2a.75.75 0 0 1 .75.75V4h7V2.75a.75.75 0 0 1 1.5 0V4h.25A2.75 2.75 0 0 1 18 6.75v8.5A2.75 2.75 0 0 1 15.25 18H4.75A2.75 2.75 0 0 1 2 15.25v-8.5A2.75 2.75 0 0 1 4.75 4H5V2.75A.75.75 0 0 1 5.75 2Zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75Z" clip-rule="evenodd"/></svg>
-      Planner
+      <span>Weekly Planner</span>
     </button>
     <button class="tab" data-tab="documents">
       <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.5 2A1.5 1.5 0 0 0 3 3.5v13A1.5 1.5 0 0 0 4.5 18h11a1.5 1.5 0 0 0 1.5-1.5V7.621a1.5 1.5 0 0 0-.44-1.06l-4.12-4.122A1.5 1.5 0 0 0 11.378 2H4.5Zm2.25 8.5a.75.75 0 0 0 0 1.5h6.5a.75.75 0 0 0 0-1.5h-6.5Zm0 3a.75.75 0 0 0 0 1.5h6.5a.75.75 0 0 0 0-1.5h-6.5Z" clip-rule="evenodd"/></svg>
-      Documents
+      <span>Documents Vault</span>
     </button>
     <button class="tab" data-tab="timeline">
       <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-13a.75.75 0 0 0-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 0 0 0-1.5h-3.25V5Z" clip-rule="evenodd"/></svg>
-      Timeline
+      <span>Project Timeline</span>
     </button>
   </nav>
 
   <!-- ── Main Content ── -->
   <main id="main-content">
+
+    <!-- ── Feature Showcase Banner ── -->
+    <section class="feature-showcase-bar glass" aria-label="Feature highlights">
+      <div class="feature-badge" onclick="switchTab('twin')">
+        <div class="fb-icon fb-icon-purple">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-7 9a7 7 0 1 1 14 0H3Z"/></svg>
+        </div>
+        <div class="fb-text">
+          <span class="fb-title">28 Personnel Twins</span>
+          <span class="fb-desc">Living Replicas &amp; Commitments</span>
+        </div>
+      </div>
+      <div class="feature-badge" onclick="switchTab('twin')">
+        <div class="fb-icon fb-icon-gold">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.068 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.83-4.401Z" clip-rule="evenodd"/></svg>
+        </div>
+        <div class="fb-text">
+          <span class="fb-title">Dual-Leadership</span>
+          <span class="fb-desc">Co-Leads &amp; Distributed Teams</span>
+        </div>
+      </div>
+      <div class="feature-badge" onclick="switchTab('tasks')">
+        <div class="fb-icon fb-icon-blue">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 4.75A.75.75 0 0 1 6.75 4h10.5a.75.75 0 0 1 0 1.5H6.75A.75.75 0 0 1 6 4.75ZM6 10a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H6.75A.75.75 0 0 1 6 10Zm0 5.25a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H6.75a.75.75 0 0 1-.75-.75ZM1.99 4.75a1 1 0 0 1 1-1h.01a1 1 0 0 1 0 2h-.01a1 1 0 0 1-1-1Zm0 5.25a1 1 0 0 1 1-1h.01a1 1 0 0 1 0 2h-.01a1 1 0 0 1-1-1Zm1 4.25a1 1 0 0 0 0 2h.01a1 1 0 0 0 0-2h-.01Z" clip-rule="evenodd"/></svg>
+        </div>
+        <div class="fb-text">
+          <span class="fb-title">Live Deliverables</span>
+          <span class="fb-desc">Priority &amp; Status Tracking</span>
+        </div>
+      </div>
+      <div class="feature-badge" onclick="switchTab('documents')">
+        <div class="fb-icon fb-icon-red">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.5 2A1.5 1.5 0 0 0 3 3.5v13A1.5 1.5 0 0 0 4.5 18h11a1.5 1.5 0 0 0 1.5-1.5V7.621a1.5 1.5 0 0 0-.44-1.06l-4.12-4.122A1.5 1.5 0 0 0 11.378 2H4.5Zm2.25 8.5a.75.75 0 0 0 0 1.5h6.5a.75.75 0 0 0 0-1.5h-6.5Zm0 3a.75.75 0 0 0 0 1.5h6.5a.75.75 0 0 0 0-1.5h-6.5Z" clip-rule="evenodd"/></svg>
+        </div>
+        <div class="fb-text">
+          <span class="fb-title">Documents Vault</span>
+          <span class="fb-desc">MoMs, Who's Who &amp; Board Decks</span>
+        </div>
+      </div>
+      <div class="feature-badge" onclick="switchTab('overview')">
+        <div class="fb-icon fb-icon-green">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.577 4.878a.75.75 0 0 1 .919-.53 35.306 35.306 0 0 1 5.952 2.378.75.75 0 0 1-.748 1.303 33.82 33.82 0 0 0-5.593-2.232.75.75 0 0 1-.53-.919ZM15.5 10a.75.75 0 0 1 .75.75 14.935 14.935 0 0 1-.84 4.887.75.75 0 1 1-1.408-.517 13.435 13.435 0 0 0 .748-4.37A.75.75 0 0 1 15.5 10Zm-4.998 5.485a.75.75 0 0 1 .918-.53 35.308 35.308 0 0 1 5.952 2.378.75.75 0 0 1-.748 1.303 33.82 33.82 0 0 0-5.592-2.232.75.75 0 0 1-.53-.919ZM2.5 10a7.5 7.5 0 1 1 15 0 7.5 7.5 0 0 1-15 0Zm7.5-6a6 6 0 1 0 0 12 6 6 0 0 0 0-12Z" clip-rule="evenodd"/></svg>
+        </div>
+        <div class="fb-text">
+          <span class="fb-title">Multi-Agency Reach</span>
+          <span class="fb-desc">ESA, AEB, Nigeria &amp; AIAA</span>
+        </div>
+      </div>
+    </section>
 
     <!-- TEAM TAB -->
     <section class="tab-panel active" id="panel-twin">
